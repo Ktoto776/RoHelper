@@ -1,0 +1,11 @@
+﻿{
+    "Name":"JoinNotify",
+    "DisplayName":{
+        "ru":"Уведомление при заходе",
+        "en":"When join notification"
+    },
+    "versionBuild":1,
+    "Settings":{
+        
+    }
+}

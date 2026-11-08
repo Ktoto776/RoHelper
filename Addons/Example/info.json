@@ -1,0 +1,9 @@
+﻿{
+    "Name":"Example",
+    "DisplayName":{
+        "ru":"Это дополнительно, кста",
+        "en":"This optional !!"
+    },
+    "versionName":"optional [1.0]",
+    "versionBuild":1
+}
