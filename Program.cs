@@ -64,14 +64,7 @@ static class Program
     private static void runLoadedAddons(){
         foreach (KeyValuePair<string,Addon> pair in Addon.loadedAddons){
             Addon addon = pair.Value;
-            if (addon.addonIsLoaded()) Task.Run(()=>{
-                Console.WriteLine(addon.luaScript.isCompiled);
-                addon.luaScript.RunScript();
-                Console.WriteLine(addon.luaScript.isRunning);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                addon.luaScript.StopScript();
-                Console.WriteLine(addon.luaScript.isRunning);
-            });
+            if (addon.addonIsLoaded()) Task.Run(addon.luaScript.RunScript);
         }
     }
 }
