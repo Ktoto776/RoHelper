@@ -1,9 +1,24 @@
-﻿{
+{
     "Name":"Example",
     "DisplayName":{
         "ru":"Это дополнительно, кста",
         "en":"This optional !!"
     },
     "versionName":"optional [1.0]",
-    "versionBuild":1
+    "versionBuild":1,
+    "Settings":{
+        "groupName (Settings - optional)":{
+            "groupDisplayName":{
+                "ru":"Дополнительно",
+                "en":"Optional"
+            },"settings":{
+                "SettingName":{
+                    "DisplayName":{
+                        "ru":"Это дополнительно, кста",
+                        "en":"This optional !!"
+                    },"type":"bool/string/number"
+                }
+            }
+        }
+    }
 }

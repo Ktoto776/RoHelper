@@ -96,4 +96,15 @@ class AddonJsonInfo{
     public Dictionary<string,string>? DisplayName {get;set;}
     public string? versionName {get;set;}
     public int versionBuild {get;set;} = 0;
+    public Dictionary<string,AddonSettingsGroupJsonInfo>? Settings {get;set;}
+}
+
+class AddonSettingsGroupJsonInfo{
+    public Dictionary<string,string>? groupDisplayName {get;set;}
+    public Dictionary<string,AddonSettingJsonInfo> settings = new();
+}
+
+class AddonSettingJsonInfo{
+    public Dictionary<string,string>? DisplayName {get;set;}
+    public string type = "bool";
 }
