@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Data.Common;
+using System.Reflection;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 using System.Windows.Forms.VisualStyles;
 using MoonSharp.Interpreter;
@@ -53,6 +55,10 @@ class Addon{
     public SettingsPanel settingsPanel;
     public SettingsPage settingsPage;
     public LuaScript luaScript = new();
+    public LuaScript.LuaEvent settingsChanged;
+    public void addonSettingsChanged(){
+        settingsChanged.trigger();
+    }
     public Addon(){
         SettingsButton = Program.mainWindow.createLeftItemButton();
         Program.mainWindow.leftAddonPanel.Controls.Add(SettingsButton);
@@ -61,6 +67,9 @@ class Addon{
         // Functions
         SettingsButton.Click += (_,_)=>settingsPanel.Activate();
         loadedCheck();
+        // Events
+        settingsChanged = new(luaScript);
+        luaScript.scriptMethods.addonSettingsChanged = settingsChanged;
     }
     public Dictionary<string,SettingsPageGroup> settingsGroups = new();
     public void loadInfo(AddonJsonInfo info,bool isEmbedded =false){
@@ -83,15 +92,57 @@ class Addon{
             foreach (var Group in info.Settings){
                 var name = Group.Key;
                 var GroupData = Group.Value;
-                var sGroup = settingsPanel.createGroup();
-                if (GroupData.groupDisplayName){
+                var sGroup = settingsPage.createGroup();
+                if (GroupData.groupDisplayName!=null){
                     Program.translator.bindToTranslator(()=>{
                         var langCode = Program.translator.langCode;
                         if (GroupData.groupDisplayName.TryGetValue(langCode,out var translate))
                             sGroup.HeaderText=translate;
                         else sGroup.HeaderText=name;
                     });
+                }else sGroup.HeaderText=name;
+                foreach (var setting in GroupData.settings){
+                    var sdata = setting.Value;
+                    var type = sdata.type.Replace("-","").ToLower();
+                    var withMinus = sdata.type.Length > 0 && sdata.type[0] == '-';
+                    var defVal = sdata.defaultValue;
+                    dynamic baseSetting = null!;
+                    if (type=="int"){
+                        var bsetting = sGroup.createIntSetting();
+                        bsetting.canBeNegative = withMinus;
+                        bsetting.defaultValue = JSONTypeGetter.getInt(defVal) ?? bsetting.defaultValue;
+                        baseSetting = bsetting;
+                    }else if (type=="float"){
+                        var bsetting = sGroup.createFloatSetting();
+                        bsetting.canBeNegative = withMinus;
+                        bsetting.defaultValue = JSONTypeGetter.getFloat(defVal) ?? bsetting.defaultValue;
+                        baseSetting = bsetting;
+                    }else if (type=="double"){
+                        var bsetting = sGroup.createDoubleSetting();
+                        bsetting.canBeNegative = withMinus;
+                        bsetting.defaultValue = JSONTypeGetter.getDouble(defVal) ?? bsetting.defaultValue;
+                        baseSetting = bsetting;
+                    }else if (type=="string"){
+                        var bsetting = sGroup.createStringSetting();
+                        bsetting.defaultValue = JSONTypeGetter.getString(defVal) ?? bsetting.defaultValue;
+                        baseSetting = bsetting;
+                    }
+                    if (baseSetting!=null){
+                        if (sdata.DisplayName!=null){
+                            Program.translator.bindToTranslator(()=>{
+                                var langCode = Program.translator.langCode;
+                                if (sdata.DisplayName.TryGetValue(langCode,out var translate))
+                                    baseSetting.NameText=translate;
+                                else baseSetting.NameText=setting.Key;
+                            });
+                        }else baseSetting.NameText=setting.Key;
+                        EventHandler ValueChanged = (_,_)=>{
+                            addonSettingsChanged();
+                        };
+                        baseSetting.ValueChanged += ValueChanged;
+                    }
                 }
+                //addonSettingsChanged
                 settingsGroups[name] = sGroup;
             }
         }
@@ -107,6 +158,32 @@ class Addon{
         }
     }
 }
+static class JSONTypeGetter{
+    static public int? getInt(JsonElement? element){
+        if (element==null) return null;
+        if (element?.ValueKind==JsonValueKind.Number){
+            if (element?.TryGetInt32(out var res) ?? false) return res;
+        } return null;
+    }
+    static public double? getDouble(JsonElement? element){
+        if (element==null) return null;
+        if (element?.ValueKind==JsonValueKind.Number){
+            return element?.GetDouble();
+        } return null;
+    }
+    static public float? getFloat(JsonElement? element){
+        if (element==null) return null;
+        if (element?.ValueKind==JsonValueKind.Number){
+            return element?.GetSingle();
+        } return null;
+    }
+    static public string? getString(JsonElement? element){
+        if (element==null) return null;
+        if (element?.ValueKind==JsonValueKind.String){
+            return element?.GetString();
+        } return null;
+    }
+}
 
 class AddonJsonInfo{
     public string Name {get;set;} = "";
@@ -118,10 +195,11 @@ class AddonJsonInfo{
 
 class AddonSettingsGroupJsonInfo{
     public Dictionary<string,string>? groupDisplayName {get;set;}
-    public Dictionary<string,AddonSettingJsonInfo> settings = new();
+    public Dictionary<string,AddonSettingJsonInfo> settings {get;set;} = new();
 }
 
 class AddonSettingJsonInfo{
     public Dictionary<string,string>? DisplayName {get;set;}
-    public string type = "bool";
+    public string type {get;set;} = "bool";
+    public JsonElement? defaultValue {get;set;}
 }

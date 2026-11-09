@@ -158,7 +158,30 @@ class MainWindow : Form
             SettingsButtonGroup.Text = text;
             MainSettingsG.Name = text;
         });
-        var SettingsGroup = MainSettingsG.settingsPage.createGroup();
-        SettingsGroup.HeaderText = "TEST";
+        var TestG = MainSettingsG.settingsPage.createGroup();
+        TestG.HeaderText = "TEST";
+        var lol = TestG.createIntSetting();
+        lol.NameText = "Int";
+        lol.canBeNegative = true;
+        lol.ValueChanged += (_,_)=>{
+            Console.WriteLine(lol.value);
+        };
+        var dou = TestG.createDoubleSetting();
+        dou.NameText = "Double";
+        dou.canBeNegative = true;
+        dou.ValueChanged += (_,_)=>{
+            Console.WriteLine(dou.value);
+        };
+        var fl = TestG.createFloatSetting();
+        fl.NameText = "Float";
+        fl.canBeNegative = true;
+        fl.ValueChanged += (_,_)=>{
+            Console.WriteLine(fl.value);
+        };
+        var str = TestG.createStringSetting();
+        str.NameText = "String";
+        str.ValueChanged += (_,_)=>{
+            Console.WriteLine(str.value);
+        };
     }
 }

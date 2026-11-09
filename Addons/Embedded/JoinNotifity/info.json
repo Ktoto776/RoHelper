@@ -6,6 +6,35 @@
     },
     "versionBuild":1,
     "Settings":{
-        
+        "groupName":{
+            "groupDisplayName":{
+                "ru":"Группа",
+                "en":"Group"
+            },
+            "settings":{
+                "SettingName":{
+                    "DisplayName":{
+                        "ru":"Это дополнительно, кста",
+                        "en":"This optional !!"
+                    },"type":"string",
+                    "defaultValue":"Default value, optional"
+                },"int":{
+                    "DisplayName":{
+                        "en":"optional name"
+                    },"type":"int",
+                    "defaultValue":1
+                },"float":{
+                    "DisplayName":{
+                        "en":"This is optional !!"
+                    },"type":"float",
+                    "defaultValue":1.1
+                },"double":{
+                    "DisplayName":{
+                        "en":"You can set - in type (for example '-int' for negative numbers support)"
+                    },"type":"double",
+                    "defaultValue":1.1
+                }
+            }
+        }
     }
 }

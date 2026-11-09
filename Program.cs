@@ -2,6 +2,7 @@ namespace RoHelper;
 
 using System.Globalization;
 using System.Reflection;
+using MoonSharp.Interpreter;
 
 static class Program
 {
@@ -22,6 +23,8 @@ static class Program
         // RunWindow
         mainWindow = new MainWindow();
         // Addons
+        UserData.RegisterType<ScriptMethods>();
+        UserData.RegisterType<LuaScript.LuaEvent>();
         loadEmbeddedAddons();
         runLoadedAddons();
         Application.Run(mainWindow);

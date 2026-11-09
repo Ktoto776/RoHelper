@@ -3,6 +3,7 @@ using MoonSharp.Interpreter;
 
 namespace RoHelper;
 
+
 class LuaScript
 {
     private const int DefaultAutoYieldCounter = 1000;
@@ -42,10 +43,13 @@ class LuaScript
             else StopScript();
         }
     }
-    private HashSet<Coroutine> Coroutines = new();
+    private HashSet<Coroutine> Coroutines = new() ;
     private ManualResetEventSlim _runningEvent = new(false);
+    public ManualResetEventSlim _eventPausedUnlock = new(false);
+    public ManualResetEventSlim _newCoroutineStarted = new(false);
     private Coroutine? RunningCoroutine;
     private Dictionary<Coroutine, DateTime> _sleepingCoroutines = new();
+    private HashSet<Coroutine> _PausedCoroutines = new();
     public LuaScript(){
         MakeGlobalENV();
         Task.Run(()=>{
@@ -73,12 +77,18 @@ class LuaScript
                             }
                         }
                     } RunningCoroutine = null;
-                    if (nearWakeUp!=null&&Coroutines.Count==_sleepingCoroutines.Count){
-                        TimeSpan time = (TimeSpan)(nearWakeUp-DateTime.UtcNow);
-                        if (time>TimeSpan.FromMilliseconds(0)){
-                            Thread.Sleep(time);
-                        }else Thread.Sleep(0);
-                    } 
+                    var pausedCount = _sleepingCoroutines.Count+_PausedCoroutines.Count;
+                    if (Coroutines.Count==pausedCount){
+                        _newCoroutineStarted.Reset();
+                        _eventPausedUnlock.Reset();
+                        if (nearWakeUp!=null){
+                            TimeSpan time = (TimeSpan)(nearWakeUp-DateTime.UtcNow);
+                            if (time>TimeSpan.FromMilliseconds(0)){
+                                _eventPausedUnlock.Wait(time);
+                            }else Thread.Sleep(0);
+                        }else if (_PausedCoroutines.Count!=0) _eventPausedUnlock.Wait();
+                        else if (Coroutines.Count==0) _newCoroutineStarted.Wait();
+                    }
                 }
             }
         });
@@ -95,14 +105,18 @@ class LuaScript
         Coroutines.Add(coroutine.Coroutine);
         _runningEvent.Set();
     }
+    public event EventHandler? scriptStopped;
     public void StopScript(){
         if (!isScrRunning) return;
         isScrRunning = false;
         _runningEvent.Reset();
         Coroutines = new();
         _sleepingCoroutines = new();
+        _PausedCoroutines = new();
         skipThisCoroutine();
+        scriptStopped?.Invoke(this,EventArgs.Empty);
     }
+    public ScriptMethods scriptMethods = new();
     private void MakeGlobalENV(){
         luaScript.Globals["wait"] = (Action<double>)((s)=>{
             var coroutine = RunningCoroutine;
@@ -122,5 +136,58 @@ class LuaScript
             coroutine.Coroutine.AutoYieldCounter = DefaultAutoYieldCounter;
             coroutine.Coroutine.Resume();
         });
+        luaScript.Globals["script"] = scriptMethods;
+    }
+    [MoonSharpUserData]
+    public class LuaEvent{
+        private LuaScript script;
+        private HashSet<DynValue> ConnectedFuncs = new();
+        private HashSet<Coroutine> OnceCoroutines = new();
+        private HashSet<Coroutine> PausedCoroutines = new();
+        private event EventHandler theEvent;
+        public LuaEvent(LuaScript script){
+            this.script = script;
+            theEvent += (_,_)=>{
+                foreach (var func in ConnectedFuncs){
+                    var Coroutine = script.luaScript.CreateCoroutine(func);
+                    script.Coroutines.Add(Coroutine.Coroutine);
+                } foreach (var Coroutine in OnceCoroutines){
+                    script.Coroutines.Add(Coroutine);
+                } foreach (var Coroutine in PausedCoroutines){
+                    script._PausedCoroutines.Remove(Coroutine);
+                } if (PausedCoroutines.Count!=0){
+                    PausedCoroutines = new();
+                    script._eventPausedUnlock.Set();
+                } if (ConnectedFuncs.Count!=0||OnceCoroutines.Count!=0){
+                    script._eventPausedUnlock.Set();
+                    script._newCoroutineStarted.Set();
+                    OnceCoroutines = new();
+                }
+            }; //EventHandler
+            script.scriptStopped += (_,_)=>{
+                ConnectedFuncs = new();
+                OnceCoroutines = new();
+                PausedCoroutines = new();
+            };
+        } 
+        [MoonSharpHidden]
+        public void trigger(){
+            theEvent?.Invoke(this,EventArgs.Empty);
+        }
+        public void Connect(DynValue func){
+            ConnectedFuncs.Add(func);
+        }
+        public void Once(DynValue func){
+            DynValue coroutine = script.luaScript.CreateCoroutine(func);
+            OnceCoroutines.Add(coroutine.Coroutine);
+        }
+        public void Wait(){
+            var Running = script.RunningCoroutine;
+            if (Running!=null){
+                PausedCoroutines.Add(Running);
+                script.skipThisCoroutine();
+                script._PausedCoroutines.Add(Running);
+            }
+        }
     }
 }

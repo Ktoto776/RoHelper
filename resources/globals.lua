@@ -1,7 +1,7 @@
 ﻿local task,print,delay,spawn,wait
 do
     local function doNothing() end
-    function wait(...) _ENV.wait(...) doNothing()
+    function wait(sec,...) _ENV.wait(sec or 0,...) doNothing()
     end function spawn(f,...)
         local tab = {...} 
         _ENV.spawn(function() f(table.unpack(tab)) end)
