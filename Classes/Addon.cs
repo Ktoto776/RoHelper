@@ -62,6 +62,7 @@ class Addon{
         SettingsButton.Click += (_,_)=>settingsPanel.Activate();
         loadedCheck();
     }
+    public Dictionary<string,SettingsPageGroup> settingsGroups = new();
     public void loadInfo(AddonJsonInfo info,bool isEmbedded =false){
         this.isEmbedded = isEmbedded;
         var Name = info.Name;
@@ -77,6 +78,22 @@ class Addon{
                     addonDisplayName=info.DisplayName[langCode];
                 else addonDisplayName=info.Name;
             });
+        }
+        if (info.Settings!=null){
+            foreach (var Group in info.Settings){
+                var name = Group.Key;
+                var GroupData = Group.Value;
+                var sGroup = settingsPanel.createGroup();
+                if (GroupData.groupDisplayName){
+                    Program.translator.bindToTranslator(()=>{
+                        var langCode = Program.translator.langCode;
+                        if (GroupData.groupDisplayName.TryGetValue(langCode,out var translate))
+                            sGroup.HeaderText=translate;
+                        else sGroup.HeaderText=name;
+                    });
+                }
+                settingsGroups[name] = sGroup;
+            }
         }
     }
     public Exception? InfoJSONExcepltion;
