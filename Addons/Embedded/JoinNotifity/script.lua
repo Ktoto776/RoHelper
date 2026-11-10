@@ -5,6 +5,7 @@ spawn(function()
     while true do
         print(ii)
         wait(0.1)
+        script.addonSettingsChanged:Wait()
     end
 end)
 
@@ -25,3 +26,15 @@ end)
 script.addonSettingsChanged:Once(function()
     print("ONCE")
 end)
+
+print(_ENV.type(script.settings),type(script))
+for k,v in pairs(script.settings) do
+    print("Group:",k)
+    for k,v in pairs(v) do
+        print(k,v)
+        print(type(v))
+        v.onValueChanged:Connect(function()
+            print(k,v,v.value)
+        end)
+    end
+end

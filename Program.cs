@@ -26,6 +26,7 @@ static class Program
         UserData.RegisterType<ScriptMethods>();
         UserData.RegisterType<LuaScript.LuaEvent>();
         UserData.RegisterType<LuaSetting>();
+        // Script.GlobalOptions.RethrowExceptionNested = true;
         loadEmbeddedAddons();
         runLoadedAddons();
         Application.Run(mainWindow);
