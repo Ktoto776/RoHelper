@@ -70,8 +70,10 @@ class Addon{
         // Events
         settingsChanged = new(luaScript);
         luaScript.scriptMethods.addonSettingsChanged = settingsChanged;
+        luaScript.scriptMethods.settings = luaSettings;
     }
     public Dictionary<string,SettingsPageGroup> settingsGroups = new();
+    public Dictionary<string,Dictionary<string,LuaSetting>> luaSettings = new();
     public void loadInfo(AddonJsonInfo info,bool isEmbedded =false){
         this.isEmbedded = isEmbedded;
         var Name = info.Name;
@@ -101,6 +103,7 @@ class Addon{
                         else sGroup.HeaderText=name;
                     });
                 }else sGroup.HeaderText=name;
+                Dictionary<string,luaSetting> luaSGroup = new();
                 foreach (var setting in GroupData.settings){
                     var sdata = setting.Value;
                     var type = sdata.type.Replace("-","").ToLower();
@@ -136,12 +139,16 @@ class Addon{
                                 else baseSetting.NameText=setting.Key;
                             });
                         }else baseSetting.NameText=setting.Key;
+                        dynamic luaSetting = new LuaSetting(luaScript,baseSetting);
+                        luaSGroup[setting.Key] = luaSetting;
                         EventHandler ValueChanged = (_,_)=>{
                             addonSettingsChanged();
+                            luaSetting.onValueChanged.trigger();
                         };
                         baseSetting.ValueChanged += ValueChanged;
                     }
                 }
+                luaSettings[name] = luaSGroup;
                 //addonSettingsChanged
                 settingsGroups[name] = sGroup;
             }
@@ -202,4 +209,18 @@ class AddonSettingJsonInfo{
     public Dictionary<string,string>? DisplayName {get;set;}
     public string type {get;set;} = "bool";
     public JsonElement? defaultValue {get;set;}
+}
+
+[MoonSharpUserData]
+class LuaSetting{
+    private BaseSetting<object> baseSetting;
+    public object value{
+        get=>baseSetting.value;
+        set=>baseSetting.value=value;
+    }
+    public LuaScript.LuaEvent onValueChanged;
+    public LuaSetting(LuaScript script,BaseSetting<object> setting){
+        baseSetting = setting;
+        onValueChanged = new(script);
+    }
 }

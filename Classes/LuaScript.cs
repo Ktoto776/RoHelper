@@ -59,6 +59,7 @@ class LuaScript
                     DateTime? nearWakeUp = null;
                     foreach (Coroutine coroutine in Coroutines.ToArray()){
                         if (isScrRunning&&Coroutines.Contains(coroutine)){
+                            if (_PausedCoroutines.Contains(coroutine)) continue;
                             if (_sleepingCoroutines.TryGetValue(coroutine, out var resumeTime)){
                                 if (DateTime.UtcNow < resumeTime) {
                                     if (nearWakeUp==null||nearWakeUp>resumeTime) nearWakeUp = resumeTime;
