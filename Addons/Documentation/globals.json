@@ -1,0 +1,16 @@
+{
+    "script":{
+        "type":"Class",
+        "ClassName":"Script",
+        "Description":{
+            "ru":"Класс скрипта",
+            "en":"Script class"
+        }
+    },
+    "test":{
+        "type":"Class",
+        "ClassName":"Test",
+        "Generics":["number"],
+        "isDeprecated":true
+    }
+}

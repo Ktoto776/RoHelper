@@ -50,7 +50,7 @@ class LuaScript
         lock (_lock){
             Coroutines.Add(coroutine);
             if (args!=null)CoroutinesArgs[coroutine] = args;
-        } newCoroutineStarted.Set();
+        } _newCoroutineStarted.Set();
     }
     private ManualResetEventSlim _runningEvent = new(false);
     public ManualResetEventSlim _eventPausedUnlock = new(false);
@@ -81,14 +81,19 @@ class LuaScript
                             } coroutine.AutoYieldCounter = DefaultAutoYieldCounter;
                             RunningCoroutine = coroutine;
                             try{
-                                DynValue[] args = new();
-                                lock(_lock){
-                                    if (CoroutinesArgs.TryGetValue(coroutine,out var arg))
-                                        args = arg;
-                                } DynValue result = coroutine.Resume(args);
+                                DynValue[]? args = null;
+                                lock(_lock) if (CoroutinesArgs.TryGetValue(coroutine,out var arg))
+                                    args = arg;
+                                DynValue result; 
+                                if (args!=null){
+                                    result = coroutine.Resume(args);
+                                    lock(_lock)CoroutinesArgs.Remove(coroutine);
+                                }else result = coroutine.Resume();
+                                // coroutine exit handler
                                 if (result.Type != DataType.YieldRequest){
-                                    lock(_lock){ Coroutines.Remove(coroutine);
-                                        CoroutinesArgs.Remove(coroutine);}
+                                    if (result.Type!=DataType.UserData||result.ToObject()!=scriptMethods){
+                                        lock(_lock) Coroutines.Remove(coroutine);
+                                    }
                                 }
                             }catch(ScriptRuntimeException exc){
                                 Console.WriteLine("LuaScript error: "+exc.DecoratedMessage);
@@ -167,6 +172,7 @@ class LuaScript
         });
         luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj) =>{
             if (obj is LuaEvent) return "ScriptEvent";
+            if (obj==scriptMethods) return "Script";
             return "unknown";
         });
         luaScript.Globals["script"] = scriptMethods;
@@ -191,7 +197,7 @@ class LuaScript
         private HashSet<Coroutine> OnceCoroutines = new();
         private HashSet<Coroutine> PausedCoroutines = new();
         [MoonSharpHidden]
-        public event EventHandler theEvent;
+        public event EventHandler? theEvent;
         public LuaEvent(LuaScript script){
             this.script = script;
             //EventHandler
@@ -203,7 +209,7 @@ class LuaScript
         } 
         public DynValue[]? _lastArgs = null;
         [MoonSharpHidden]
-        public void trigger(DynValue[]? args){
+        public void trigger(DynValue[]? args =null){
             theEvent?.Invoke(this,EventArgs.Empty);
             lock(script._lock){
                 _lastArgs = args;

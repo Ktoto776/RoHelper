@@ -1,8 +1,7 @@
 ﻿local task,print,delay,spawn,wait,type,typeof
 local script
 do
-    local function doNothing() end
-    function wait(sec,...) _ENV.wait(sec or 0,...) doNothing()
+    function wait(sec,...) _ENV.wait(sec or 0,...) coroutine.yield(_ENV.script)
     end function spawn(f,...)
         local tab = {...} 
         _ENV.spawn(function() f(table.unpack(tab)) end)
@@ -25,8 +24,10 @@ do
     local classIndex = {
         ScriptEvent={
             Wait=function(self)
-                parsedToCS[seft].Wait(self)
-                return table.unpack(self._lastArgs)
+                parsedToCS[self].Wait(self)
+                coroutine.yield(_ENV.script)
+                local args = self._lastArgs
+                return args and table.unpack(args)
             end,
         }
     }

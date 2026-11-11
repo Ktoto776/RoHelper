@@ -3,3 +3,5 @@ bin/
 Release/
 obj/
 publish.bat
+/Addons/Documentation/.lua
+definitions.bat

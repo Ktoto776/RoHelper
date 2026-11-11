@@ -57,8 +57,8 @@ class Addon{
     public SettingsPage settingsPage;
     public LuaScript luaScript = new();
     public LuaScript.LuaEvent settingsChanged;
-    public void addonSettingsChanged(){
-        settingsChanged.trigger();
+    public void addonSettingsChanged(string groupName, string settingName, DynValue value){
+        settingsChanged.trigger([DynValue.NewString(groupName),DynValue.NewString(settingName),value]);
     }
     public Addon(){
         SettingsButton = Program.mainWindow.createLeftItemButton();
@@ -145,8 +145,9 @@ class Addon{
                         });
                         luaSGroup[setting.Key] = luaSetting;
                         EventHandler ValueChanged = (_,_)=>{
-                            addonSettingsChanged();
-                            luaSetting.onValueChanged.trigger();
+                            var val = luaSetting.value;
+                            luaSetting.onValueChanged.trigger([val]);
+                            addonSettingsChanged(name,setting.Key,val);
                         }; baseSetting.ValueChanged += ValueChanged;
                     }
                 }
