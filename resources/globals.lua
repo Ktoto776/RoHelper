@@ -18,18 +18,28 @@ do
         end return _ENV.print(str)
     end task = {wait=wait,spawn=spawn,delay=delay}
     local parsedClassesCS = {}
+    local parsedToCS = {}
     local typeForClasses = {}
     function type(obj) if typeForClasses[obj] then return "userdata" end return _ENV.type(obj) end 
     function typeof(obj) return typeForClasses[obj] or _ENV.type(obj) end
+    local classIndex = {
+        ScriptEvent={
+            Wait=function(self)
+                parsedToCS[seft].Wait(self)
+                return table.unpack(self._lastArgs)
+            end,
+        }
+    }
     local function parseCSharpClass(class)
         if parsedClassesCS[class] then return parsedClassesCS[class] end
         local typ = _ENV.type(class)
         if typ=="userdata" then
-            local className = "unknown"
+            local className = getClassTypeName(class)
             local propertiesType = _ENV.classGetMembersWriteTypes(class)
             local obj = setmetatable({},{
                 __index=function(_,name)
-                    if propertiesType[name] then return parseCSharpClass(class[name])
+                    if classIndex[className] and classIndex[className][name] then return classIndex[className][name]
+                    elseif propertiesType[name] then return parseCSharpClass(class[name])
                     else error("value '"..name.."' is not exists in class "..className)
                     end
                 end, __newindex=function(_,name,val)
@@ -41,6 +51,7 @@ do
                 __pairs=function(_) error("Pairs is not supported") end,
                 __tostring=function(_) return tostring(class) end,
             }) parsedClassesCS[class] = obj
+            parsedToCS[obj] = class
             typeForClasses[obj] = className
             return obj
         elseif typ=="table" then

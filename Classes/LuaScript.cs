@@ -46,15 +46,18 @@ class LuaScript
     }
     private readonly object _lock = new object();
     private HashSet<Coroutine> Coroutines = new();
-    public void startCoroutine(Coroutine coroutine){
-        lock (_lock) Coroutines.Add(coroutine);
-        _newCoroutineStarted.Set();
+    public void startCoroutine(Coroutine coroutine, DynValue[]? args =null){
+        lock (_lock){
+            Coroutines.Add(coroutine);
+            if (args!=null)CoroutinesArgs[coroutine] = args;
+        } newCoroutineStarted.Set();
     }
     private ManualResetEventSlim _runningEvent = new(false);
     public ManualResetEventSlim _eventPausedUnlock = new(false);
     public ManualResetEventSlim _newCoroutineStarted = new(false);
     private Coroutine? RunningCoroutine;
     private Dictionary<Coroutine, DateTime> _sleepingCoroutines = new();
+    public Dictionary<Coroutine, DynValue[]> CoroutinesArgs = new();
     private HashSet<Coroutine> _PausedCoroutines = new();
     public LuaScript(){
         MakeGlobalENV();
@@ -78,9 +81,14 @@ class LuaScript
                             } coroutine.AutoYieldCounter = DefaultAutoYieldCounter;
                             RunningCoroutine = coroutine;
                             try{
-                                DynValue result = coroutine.Resume();
+                                DynValue[] args = new();
+                                lock(_lock){
+                                    if (CoroutinesArgs.TryGetValue(coroutine,out var arg))
+                                        args = arg;
+                                } DynValue result = coroutine.Resume(args);
                                 if (result.Type != DataType.YieldRequest){
-                                    lock(_lock) Coroutines.Remove(coroutine);
+                                    lock(_lock){ Coroutines.Remove(coroutine);
+                                        CoroutinesArgs.Remove(coroutine);}
                                 }
                             }catch(ScriptRuntimeException exc){
                                 Console.WriteLine("LuaScript error: "+exc.DecoratedMessage);
@@ -129,6 +137,7 @@ class LuaScript
             Coroutines = new();
             _sleepingCoroutines = new();
             _PausedCoroutines = new();
+            CoroutinesArgs = new();
         } skipThisCoroutine();
         scriptStopped?.Invoke(this,EventArgs.Empty);
     }
@@ -156,6 +165,10 @@ class LuaScript
             coroutine.Coroutine.AutoYieldCounter = DefaultAutoYieldCounter;
             coroutine.Coroutine.Resume();
         });
+        luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj) =>{
+            if (obj is LuaEvent) return "ScriptEvent";
+            return "unknown";
+        });
         luaScript.Globals["script"] = scriptMethods;
         luaScript.Globals["classGetMembersWriteTypes"] = (Func<object?,Table?>)((obj)=>{
             if (obj==null) return null;
@@ -177,37 +190,41 @@ class LuaScript
         private HashSet<DynValue> ConnectedFuncs = new();
         private HashSet<Coroutine> OnceCoroutines = new();
         private HashSet<Coroutine> PausedCoroutines = new();
-        private event EventHandler theEvent;
+        [MoonSharpHidden]
+        public event EventHandler theEvent;
         public LuaEvent(LuaScript script){
             this.script = script;
-            theEvent += (_,_)=>{
-                lock(script._lock){
-                    foreach (var func in ConnectedFuncs){
-                        var Coroutine = script.luaScript.CreateCoroutine(func);
-                        script.Coroutines.Add(Coroutine.Coroutine);
-                    } foreach (var Coroutine in OnceCoroutines){
-                        script.Coroutines.Add(Coroutine);
-                    }
-                } foreach (var Coroutine in PausedCoroutines){
-                    lock(script._lock)script._PausedCoroutines.Remove(Coroutine);
-                } if (PausedCoroutines.Count!=0){
-                    PausedCoroutines = new();
-                    script._eventPausedUnlock.Set();
-                } if (ConnectedFuncs.Count!=0||OnceCoroutines.Count!=0){
-                    script._eventPausedUnlock.Set();
-                    script._newCoroutineStarted.Set();
-                    OnceCoroutines = new();
-                }
-            }; //EventHandler
+            //EventHandler
             script.scriptStopped += (_,_)=>{
                 ConnectedFuncs = new();
                 OnceCoroutines = new();
                 PausedCoroutines = new();
             };
         } 
+        public DynValue[]? _lastArgs = null;
         [MoonSharpHidden]
-        public void trigger(){
+        public void trigger(DynValue[]? args){
             theEvent?.Invoke(this,EventArgs.Empty);
+            lock(script._lock){
+                _lastArgs = args;
+                foreach (var func in ConnectedFuncs){
+                    var Coroutine = script.luaScript.CreateCoroutine(func);
+                    script.Coroutines.Add(Coroutine.Coroutine);
+                    if (args!=null) script.CoroutinesArgs[Coroutine.Coroutine] = args;
+                } foreach (var Coroutine in OnceCoroutines){
+                    script.Coroutines.Add(Coroutine);
+                    if (args!=null) script.CoroutinesArgs[Coroutine] = args;
+                }
+            } foreach (var Coroutine in PausedCoroutines){
+                lock(script._lock)script._PausedCoroutines.Remove(Coroutine);
+            } if (PausedCoroutines.Count!=0){
+                PausedCoroutines = new();
+                script._eventPausedUnlock.Set();
+            } if (ConnectedFuncs.Count!=0||OnceCoroutines.Count!=0){
+                script._eventPausedUnlock.Set();
+                script._newCoroutineStarted.Set();
+                OnceCoroutines = new();
+            }
         }
         public void Connect(DynValue func){
             ConnectedFuncs.Add(func);
@@ -225,6 +242,7 @@ class LuaScript
             }
         }
     }
+    // работай чат джепете
     public static string GetLuaTypeName(Type t)
     {
         // number
