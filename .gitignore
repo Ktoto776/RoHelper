@@ -4,4 +4,6 @@ Release/
 obj/
 publish.bat
 /Addons/Documentation/.lua
+/Addons/Documentation/json.lua
 definitions.bat
+definitions.sh

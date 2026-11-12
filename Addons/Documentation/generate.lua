@@ -1,4 +1,4 @@
-﻿local function makefolder(name)
+local function makefolder(name)
     if package.config:sub(1,1) == "\\" then
         os.execute('md "' .. name .. '"')
     else
@@ -16,11 +16,12 @@ local function writefile(path,value)
 end
 
 local function listfiles(path)
-    local data = ""
+    local data
     if package.config:sub(1,1) == "\\" then
         data = io.popen('dir "'..path..'" /B')
-    else data = io.popen('dir "'..path..'" /B')
+    else data = io.popen('ls "'..path..'"')
     end local files = {}
+    if not data then return {} end
     for file in data:lines() do
         table.insert(files,file)
     end return files
@@ -74,3 +75,11 @@ for name,v in pairs(JSONDecode(readfile("./globals.json"))) do
 end
 
 writefile(outFolder.."globals.d.lua",globalD)
+
+for _,fname in pairs(listfiles(DocumentationClassesPath)) do
+    local fpath = DocumentationClassesPath..fname
+    local v = JSONDecode(readfile(fpath))
+    local data = "---@class "..v.ClassName
+    
+    writefile(outClassesFolder..fname,data)
+end
