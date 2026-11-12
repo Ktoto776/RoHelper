@@ -60,6 +60,7 @@ class LuaScript
     public Dictionary<Coroutine, DynValue[]> CoroutinesArgs = new();
     private HashSet<Coroutine> _PausedCoroutines = new();
     public LuaScript(){
+        scriptMethods = new(this);
         MakeGlobalENV();
         Task.Run(()=>{
             while (true){
@@ -146,7 +147,7 @@ class LuaScript
         } skipThisCoroutine();
         scriptStopped?.Invoke(this,EventArgs.Empty);
     }
-    public ScriptMethods scriptMethods = new();
+    public ScriptMethods scriptMethods;
     private void MakeGlobalENV(){
         luaScript.Globals["print"] = (Action<object?>)((o)=>{
             var str = (o ?? "nil").ToString();
@@ -165,14 +166,14 @@ class LuaScript
         });
         luaScript.Globals["spawn"] = (Action<DynValue>)((func) =>{
             DynValue coroutine = luaScript.CreateCoroutine(func);
-            lock (_lock) Coroutines.Add(coroutine.Coroutine);
-            RunningCoroutine = coroutine.Coroutine;
-            coroutine.Coroutine.AutoYieldCounter = DefaultAutoYieldCounter;
-            coroutine.Coroutine.Resume();
+            lock (_lock)Coroutines.Add(coroutine.Coroutine);
         });
         luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj) =>{
             if (obj is LuaEvent) return "Event";
             if (obj==scriptMethods) return "Script";
+            if (obj==scriptMethods.permissions) return "Permissions";
+            if (obj is ScriptWindow) return "Window";
+            if (obj is ScriptMethods.LuaTrayMenu) return "TrayButton";
             return "unknown";
         });
         luaScript.Globals["script"] = scriptMethods;

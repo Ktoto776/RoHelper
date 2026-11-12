@@ -7,11 +7,6 @@ using MoonSharp.Interpreter;
 
 namespace RoHelper;
 
-class ScriptStopException : Exception
-{
-    public ScriptStopException(string reason) : base(reason){}
-}
-
 class Addon{
     private string theAddonName = "";
     private bool isLoadedPrivate = false;
@@ -70,11 +65,14 @@ class Addon{
         loadedCheck();
         // Events
         settingsChanged = new(luaScript);
+        luaScript.scriptMethods.setAddon(this);
         luaScript.scriptMethods.addonSettingsChanged = settingsChanged;
         luaScript.scriptMethods.settings = luaSettings;
+        luaScript.scriptMethods.permissions = permissions;
     }
     public Dictionary<string,SettingsPageGroup> settingsGroups = new();
     public Dictionary<string,Dictionary<string,LuaSetting>> luaSettings = new();
+    public LuaPermissions permissions = new();
     public void loadInfo(AddonJsonInfo info,bool isEmbedded =false){
         this.isEmbedded = isEmbedded;
         var Name = info.Name;
@@ -142,6 +140,8 @@ class Addon{
                         }else baseSetting.NameText=setting.Key;
                         var luaSetting = new LuaSetting(luaScript,()=>{
                             return DynValue.FromObject(luaScript.luaScript,baseSetting.value);
+                        }, () => {
+                            return baseSetting.NameText;
                         });
                         luaSGroup[setting.Key] = luaSetting;
                         EventHandler ValueChanged = (_,_)=>{
@@ -154,6 +154,13 @@ class Addon{
                 luaSettings[name] = luaSGroup;
                 //addonSettingsChanged
                 settingsGroups[name] = sGroup;
+            }
+            if (info.Permissions!=null) foreach (var permission in info.Permissions){
+                if (LuaPermissions.registeredPermissions.Contains(permission)){
+                    permissions.GrantedPermissions.Add(permission);
+                }
+            } if (info.UserPermissions!=null) foreach (var permission in info.UserPermissions){
+                permissions.RequiredUserPermissions.Add(permission);
             }
         }
     }
@@ -201,6 +208,8 @@ class AddonJsonInfo{
     public string? versionName {get;set;}
     public int versionBuild {get;set;} = 0;
     public Dictionary<string,AddonSettingsGroupJsonInfo>? Settings {get;set;}
+    public string[]? Permissions {get;set;}
+    public string[]? UserPermissions {get;set;}
 }
 
 class AddonSettingsGroupJsonInfo{
@@ -217,15 +226,20 @@ class AddonSettingJsonInfo{
 [MoonSharpUserData]
 class LuaSetting{
     private Func<DynValue> getValue;
+    private Func<string> getDisplayName;
     private Action<DynValue>? setValue;
     public DynValue value{
         get=>getValue();
         set{if (setValue!=null) setValue(value);}
     }
     public LuaScript.LuaEvent onValueChanged;
-    public LuaSetting(LuaScript script,Func<DynValue> getValue,Action<DynValue>? setValue =null){
+    public string displayName{
+        get=>getDisplayName();
+    }
+    public LuaSetting(LuaScript script,Func<DynValue> getValue,Func<string> getDisplayName,Action<DynValue>? setValue =null){
         this.getValue = getValue;
         this.setValue = setValue;
+        this.getDisplayName = getDisplayName;
         onValueChanged = new(script);
     }
 }

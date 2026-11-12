@@ -4,6 +4,10 @@
         "ru":"Уведомление при заходе",
         "en":"When join notification"
     },
+    "Permissions":[
+        "create.tray_button",
+        "create.window"
+    ],
     "versionBuild":1,
     "Settings":{
         "groupName":{

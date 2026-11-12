@@ -1,7 +1,8 @@
----@diagnostic disable: inject-field
 ---@diagnostic disable: missing-return
+---@diagnostic disable: inject-field
 
 ---@class Setting
+---@field displayName string #Отображаемое имя этой настройки
 ---@field value any #Значение этой настройки
 local Setting={}
 

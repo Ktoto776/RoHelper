@@ -36,6 +36,50 @@
                 "en":"A settings table, where the first layer consists of groups, and the second layer contains the actual settings.",
                 "ru":"Таблица настроек, где 1 слой - группы, а второй уже сами настройки"
             }
+        },"permissions":{
+            "memberType":"Property",
+            "isReadOnly":true,
+            "valueType":"Permissions",
+            "Description":{
+                "en":"Script permissions",
+                "ru":"Разрешения скрипта"
+            }
+        },"getTrayMenuButton":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Permissions":["create.tray_button"],
+            "Args":[],
+            "Returns":[
+                {
+                    "name":"trayButton",
+                    "type":"TrayButton?",
+                    "description":{
+                        "en":"Button in tray menu, if permissions is not granted => returns nil",
+                        "ru":"Кнопка в меню трея, если разрешение не выдано => вернёт nil"
+                    }
+                }
+            ],"Description":{
+                "en":"Returns button in tray",
+                "ru":"Возвращает кнопку в трее"
+            }
+        },"createWindow":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Permissions":["create.window"],
+            "Args":[],
+            "Returns":[
+                {
+                    "name":"window",
+                    "type":"Window?",
+                    "description":{
+                        "en":"New window, if permissions is not granted => returns nil",
+                        "ru":"Новое окно, если разрешение не выдано => вернёт nil"
+                    }
+                }
+            ],"Description":{
+                "en":"Returns window",
+                "ru":"Возвращает окно"
+            }
         }
     }
 }

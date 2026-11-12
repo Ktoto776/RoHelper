@@ -22,6 +22,7 @@
         },"spawn":{
             "memberType":"Method",
             "isWithSelf":false,
+            "Overload":[{"dType":"fun(func:fun(...),...)"}],
             "Args":[
                 {
                     "name":"func",
@@ -41,6 +42,7 @@
         },"delay":{
             "memberType":"Method",
             "isWithSelf":false,
+            "Overload":[{"dType":"fun(durationInSecs:number,func:fun(...),...)"}],
             "Args":[
                 {
                     "name":"durationInSecs",
@@ -63,6 +65,15 @@
             "Description":{
                 "en":"Execute a function in parallel after a specified delay",
                 "ru":"Выполнить функцию параллельно через заданное время"
+            }
+        },"pass":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[],
+            "Returns":[],
+            "Description":{
+                "en":"Skips this script task in order to execute other tasks more quickly",
+                "ru":"Пропускает эту задачу скрипта, чтобы быстрее выполнить другие задачи"
             }
         }
     }

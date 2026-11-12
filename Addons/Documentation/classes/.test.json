@@ -6,8 +6,10 @@
         "Method":{
             "memberType":"Method",
             "isWithSelf":true,
+            "Permissions":["permission","if not granted => error"],
             "Overload":[
                 {
+                    "dType":"fun(something:any, ...):(something:any, ...)",
                     "args":[
                         {
                             "name":"overloadARG",
@@ -75,6 +77,7 @@
         },
         "Name":{
             "memberType":"Property",
+            "Permissions":[],
             "valueType":"T?",
             "isReadOnly":false,
             "Description":{

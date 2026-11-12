@@ -26,6 +26,8 @@ static class Program
         UserData.RegisterType<ScriptMethods>();
         UserData.RegisterType<LuaScript.LuaEvent>();
         UserData.RegisterType<LuaSetting>();
+        UserData.RegisterType<LuaPermissions>();
+        UserData.RegisterType<ScriptWindow>();
         loadEmbeddedAddons();
         runLoadedAddons();
         Application.Run(mainWindow);

@@ -6,6 +6,16 @@
     },
     "versionName":"optional [1.0]",
     "versionBuild":1,
+    "Permissions":[
+        "keyboard.read",
+        "keyboard.write",
+        "create.window",
+        "create.tray_button"
+    ],
+    "UserPermissions":[
+        "keyboard.fullRead",
+        "keyboard.fullWrite"
+    ],
     "Settings":{
         "groupName (Settings - optional)":{
             "groupDisplayName":{

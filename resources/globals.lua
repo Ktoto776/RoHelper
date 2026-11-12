@@ -1,7 +1,7 @@
 ﻿local task,print,delay,spawn,wait,type,typeof
 local script
 do
-    function wait(sec,...) _ENV.wait(sec or 0,...) coroutine.yield(_ENV.script)
+    function wait(sec) _ENV.wait(sec or 0) coroutine.yield(_ENV.script)
     end function spawn(f,...)
         local tab = {...} 
         _ENV.spawn(function() f(table.unpack(tab)) end)
@@ -15,10 +15,11 @@ do
                 str = str.."   "
             end str = str..tostring(v)
         end return _ENV.print(str)
-    end task = {wait=wait,spawn=spawn,delay=delay}
-    local parsedClassesCS = {}
+    end task = {wait=wait,spawn=spawn,delay=delay,pass=function()
+        coroutine.yield(_G.script)
+    end} local parsedClassesCS = {}
     local parsedToCS = {}
-    local typeForClasses = {}
+    local typeForClasses = {[task]="task"}
     function type(obj) if typeForClasses[obj] then return "userdata" end return _ENV.type(obj) end 
     function typeof(obj) return typeForClasses[obj] or _ENV.type(obj) end
     local classIndex = {

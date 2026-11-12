@@ -1,0 +1,31 @@
+{
+    "ClassName":"Permissions",
+    "Members":{
+        "isPermissionGranted":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[
+                {
+                    "name":"permissionName",
+                    "type":"string",
+                    "description":{
+                        "en":"Permission name",
+                        "ru":"Название разрешения"
+                    }
+                }
+            ], "Returns":[
+                {
+                    "name":"isGranted",
+                    "type":"boolean",
+                    "description":{
+                        "en":"Is permission granted?",
+                        "ru":"Выдано ли разрешение"
+                    }
+                }
+            ], "Description":{
+                "en":"Checks whether a permit has been issued, as indicated in info.json",
+                "ru":"Узнаёт выдано ли разрешение в info.json"
+            }
+        }
+    }
+}

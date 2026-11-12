@@ -49,7 +49,8 @@ end)
 for groupName,group in pairs(script.settings) do
     print("Сканирую группу настроек:",groupName)
     for settingName,setting in pairs(group) do
-        print("Нашёл настройку '"..settingName.."' в группе",groupName,"её значение: ",setting.value)
+        print("Нашёл настройку '"..settingName.."' в группе",groupName,"её значение: ",setting.value,
+            "её имя: ",setting.displayName)
         setting.onValueChanged:Connect(function(value)
             print("Изменилась настройка",settingName,"теперь её значение:",value)
         end)
@@ -62,4 +63,4 @@ end
 
 -- Получить типы
 print(type(script)) --> "userdata", вернёт название lua типа
-print(typeof(scrint)) --> "Script", вернёт название класса(или lua типа)
+print(typeof(script)) --> "Script", вернёт название класса(или lua типа)

@@ -7,7 +7,7 @@ using System;
 public class MainTray
 {
     private NotifyIcon trayIcon;
-    private ContextMenuStrip trayMenu;
+    public ContextMenuStrip trayMenu;
     public ToolStripItem OpenWindowButton; 
     public ToolStripItem ExitProgramButton; 
     public MainTray(){
@@ -15,7 +15,7 @@ public class MainTray
         trayMenu.Items.Add(new ToolStripSeparator());
         OpenWindowButton = trayMenu.Items.Add("Open", null, (_,_)=>OpenWindow());
         ExitProgramButton = trayMenu.Items.Add("Exit", null, ExitButton);
-
+        
         // trayMenu.Items.Insert(0,new ToolStripComboBox());
 
         Program.translator.bindToTranslateChanged("ExitApp", (string text) =>

@@ -1,0 +1,13 @@
+{
+    "ClassName":"TrayButton",
+    "Members":{
+        "Clicked":{
+            "memberType":"Event",
+            "Args":[],
+            "Description":{
+                "en":"Fires when click to button in tray",
+                "ru":"Запускается при клике на кнопку в трее"
+            }
+        }
+    }
+}

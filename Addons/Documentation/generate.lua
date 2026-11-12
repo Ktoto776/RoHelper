@@ -44,6 +44,9 @@ end
 local descriptionLang = "ru"
 local defaultDescriptionLang = "en"
 
+---@type {[string]:boolean}
+local ignorePermissions = {["create.tray_button"]=true}
+
 local isTest = false
 
 local DocumentationGlobals = "./globals.json"
@@ -81,9 +84,29 @@ local function getType(typeName,generics,typeData)
     end
 end
 
+local permissionsTextLangs = {
+    ru="Требуются разрешения: ",
+    en="Need permission(s): "
+}
+local permissionsText = permissionsTextLangs[descriptionLang] or 
+                        permissionsTextLangs[defaultDescriptionLang]
+
+local function getPermissionsText(permissions)
+    if not permissions then return end
+    local perms = {}
+    for _,v in pairs(permissions) do
+        if not ignorePermissions[v] then
+            table.insert(perms,v)
+        end
+    end if perms and #perms>0 then
+        return "--* **["..permissionsText..table.concat(perms,"; ").."]**\n"
+    end
+end
+
 local globalD = "---@diagnostic disable: missing-return"
 for name,v in pairs(JSONDecode(readfile("./globals.json"))) do
     if globalD~="" then globalD = globalD.."\n\n" end
+    local permissions = getPermissionsText(v.Permissions)
     if v.type=="function" then
         local data = ""
         local str = "function "..name.."("
@@ -92,12 +115,37 @@ for name,v in pairs(JSONDecode(readfile("./globals.json"))) do
                 if k>1 then str=str.."," end
                 str = str..arg.name
                 local type = arg.dType or getType(arg.type,arg.generics,arg.typeData)
-                data = data.."---@param "..arg.name.." "..type.."\n"
+                data = data.."---@param "..arg.name.." "..type
+                if v.Description then
+                    if v.Description[descriptionLang] then
+                        data = data.." #"..v.Description[descriptionLang]
+                    elseif v.Description[defaultDescriptionLang] then
+                        data = data.." #"..v.Description[defaultDescriptionLang]
+                    end
+                end data = data.."\n"
             end str = str..") end"
         end if v.Returns then
             for _,ret in pairs(v.Returns) do
                 local type = ret.dType or getType(ret.type,ret.generics,ret.typeData)
-                data = data.."---@return "..type.." "..ret.name.."\n"
+                data = data.."---@return "..type.." "..ret.name
+                if v.Description then
+                    if v.Description[descriptionLang] then
+                        data = data.." #"..v.Description[descriptionLang]
+                    elseif v.Description[defaultDescriptionLang] then
+                        data = data.." #"..v.Description[defaultDescriptionLang]
+                    end
+                end data = data.."\n"
+            end
+        end if v.Overload then
+            for _,overload in pairs(v.Overload) do
+                data = "---@overload "..(overload.dType or getType("function",nil,overload)).."\n"..data
+            end
+        end data = (permissions or "")..data
+        if v.Description then
+            if v.Description[descriptionLang] then
+                data = "--[["..v.Description[descriptionLang].."]]\n"..data
+            elseif v.Description[defaultDescriptionLang] then
+                data = "--[["..v.Description[defaultDescriptionLang].."]]\n"..data
             end
         end globalD = globalD..data..str
         print("Global method detected: "..name)
@@ -107,7 +155,8 @@ for name,v in pairs(JSONDecode(readfile("./globals.json"))) do
         end local str = "---@type "..type.."\n"..name.." = nil"
         if v.isDeprecated then
             str = "---@deprecated\n"..str
-        end if v.Description then
+        end str = (permissions or "")..str
+        if v.Description then
             if v.Description[descriptionLang] then
                 str = "--[["..v.Description[descriptionLang].."]]\n"..str
             elseif v.Description[defaultDescriptionLang] then
@@ -153,6 +202,7 @@ for _,fname in pairs(listfiles(DocumentationClassesPath)) do
     local data2 = "local "..classVarName.."={}"
     if v.Members then
         for name,member in pairs(v.Members) do
+            local permissions = getPermissionsText(member.Permissions)
             if member.memberType=="Event" then
                 local eventData = string.gsub(defaultEventData,"_event_name",classVarName.."."..name)
                 local inFunData = ""
@@ -175,6 +225,7 @@ for _,fname in pairs(listfiles(DocumentationClassesPath)) do
                 end eventData = string.gsub(eventData,"inFunData**",inFunData)
                 eventData = string.gsub(eventData,"--returns**",returns)
                 headers["---@diagnostic disable: inject-field"] = true
+                eventData = (permissions or"")..eventData
                 if member.Description then
                     if member.Description[descriptionLang] then
                         eventData = "--[["..member.Description[descriptionLang].."]]"..eventData
@@ -223,6 +274,7 @@ for _,fname in pairs(listfiles(DocumentationClassesPath)) do
                         end argsData = argsData..argData.."\n"
                     end headers["---@diagnostic disable: missing-return"] = true
                 end methodData = methodData..name.."("..table.concat(argNames,",")..")end"
+                argsData = (permissions or"")..argsData
                 if member.Description then
                     if member.Description[descriptionLang] then
                         argsData = "--[["..member.Description[descriptionLang].."]]\n"..argsData
@@ -236,7 +288,7 @@ for _,fname in pairs(listfiles(DocumentationClassesPath)) do
                     type = "unknown"
                     warn("Class "..className.." has unknown member '"..name.."'")
                 else type = member.dType or getType(type,member.valueGenerics,member.typeData)
-                end local memberData = "---@field "..name.." "..type
+                end local memberData = (permissions or"").."---@field "..name.." "..type
                 if member.Description then
                     if member.Description[descriptionLang] then
                         memberData = memberData.." #"..member.Description[descriptionLang]

@@ -1,44 +1,21 @@
-﻿--wait(1)
+﻿local stopped = false
 
-local ii = 0
-spawn(function()
-    while true do
-        print(ii)
+task.spawn(function()
+    print(123)
+    while not stopped do
         wait(0.1)
-        -- script.addonSettingsChanged:Wait()
+        print("CLICK TRAY BUTTON")
     end
 end)
+print(321)
 
-spawn(function()
-    while true do
-        ii = ii+1
-        wait(0.1) -- fix - stops all threads
-        script.addonSettingsChanged:Wait()
-    end
+local trayButton = script:getTrayMenuButton()
+if not trayButton then return end
+trayButton.Clicked:Wait()
+
+script:createWindow()
+
+stopped = true
+trayButton.Clicked:Connect(function()
+    print("LOL")
 end)
-
-script.addonSettingsChanged:Connect(function(groupName,settingName,value)
-    print("GName:",groupName)
-    print("settingName:",settingName)
-    print("value:",value)
-end)
-
--- script.addonSettingsChanged:Once(function()
---     print("ONCE")
--- end)
-
-print(_ENV.type(script.settings),type(script))
-for k,v in pairs(script.settings) do
-    print("Group:",k)
-    for k,v in pairs(v) do
-        print(k,v)
-        print(type(v))
-        v.onValueChanged:Connect(function(val)
-            print(k,v,val)
-            print("WAITed: ",v.onValueChanged:Wait())
-        end)
-        -- v.onValueChanged:Connect(function(val)
-        --     print(k,v,val)
-        -- end)
-    end
-end

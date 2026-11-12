@@ -21,6 +21,14 @@
                 "en":"Value of this setting",
                 "ru":"Значение этой настройки"
             }
+        },"displayName":{
+            "memberType":"Property",
+            "isReadOnly":true,
+            "valueType":"string",
+            "Description":{
+                "en":"Display name of this setting",
+                "ru":"Отображаемое имя этой настройки"
+            }
         }
     }
 }

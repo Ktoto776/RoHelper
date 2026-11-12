@@ -32,6 +32,7 @@
         }
     },"spawn":{
         "type":"function",
+        "Overload":[{"dType":"fun(func:fun(...),...)"}],
         "Args":[
             {
                 "name":"func",
@@ -50,6 +51,7 @@
         }
     },"delay":{
         "type":"function",
+        "Overload":[{"dType":"fun(durationInSecs:number,func:fun(...),...)"}],
         "Args":[
             {
                 "name":"durationInSecs",
@@ -72,6 +74,32 @@
         "Description":{
             "en":"Execute a function in parallel after a specified delay",
             "ru":"Выполнить функцию параллельно через заданное время"
+        }
+    },"typeof":{
+        "type":"function",
+        "Args":[
+            {
+                "name":"object",
+                "type":"any?",
+                "description":{
+                    "en":"Object",
+                    "ru":"Обьект"
+                }
+            }
+        ],
+        "Returns":[
+            {
+                "name":"type",
+                "type":"string",
+                "description":{
+                    "en":"Object(or class) type",
+                    "ru":"Тип обьекта(или класса)"
+                }
+            }
+        ],
+        "Description":{
+            "en":"Retrieves the type of an object or class",
+            "ru":"Получает тип обьекта или класса"
         }
     }
 }

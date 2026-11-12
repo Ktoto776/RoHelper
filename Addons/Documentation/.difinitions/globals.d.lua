@@ -1,19 +1,29 @@
 ---@diagnostic disable: missing-return
 
----@param func fun(...)
+--[[Выполнить функцию параллельно через заданное время]]
+---@overload fun(durationInSecs:number,func:fun(...),...)
+---@param durationInSecs number #Выполнить функцию параллельно через заданное время
+---@param func fun(...) #Выполнить функцию параллельно через заданное время
+function delay(durationInSecs,func) end
+
+--[[Выполнить функцию параллельно]]
+---@overload fun(func:fun(...),...)
+---@param func fun(...) #Выполнить функцию параллельно
 function spawn(func) end
 
----@param durationInSecs number
+--[[Заморживает выполнение на заданное время в секундах]]
+---@param durationInSecs number #Заморживает выполнение на заданное время в секундах
 function wait(durationInSecs) end
 
----@param durationInSecs number
----@param func fun(...)
-function delay(durationInSecs,func) end
+--[[Сборник функций связанных с параллельными задачами]]
+---@type task
+task = nil
 
 --[[Класс скрипта]]
 ---@type Script
 script = nil
 
---[[Сборник функций связанных с параллельными задачами]]
----@type task
-task = nil
+--[[Получает тип обьекта или класса]]
+---@param object any? #Получает тип обьекта или класса
+---@return string type #Получает тип обьекта или класса
+function typeof(object) end

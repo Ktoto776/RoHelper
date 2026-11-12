@@ -1,0 +1,14 @@
+{
+    "ClassName":"Window",
+    "Members":{
+        "isOpened":{
+            "memberType":"Property",
+            "valueType":"boolean",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Is window opened",
+                "ru":"открыто ли окно"
+            }
+        }
+    }
+}
