@@ -171,7 +171,7 @@ class LuaScript
             coroutine.Coroutine.Resume();
         });
         luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj) =>{
-            if (obj is LuaEvent) return "ScriptEvent";
+            if (obj is LuaEvent) return "Event";
             if (obj==scriptMethods) return "Script";
             return "unknown";
         });

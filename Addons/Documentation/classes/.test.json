@@ -1,0 +1,103 @@
+{
+    "ClassName":"Test",
+    "Inherited":["Script"],
+    "Generics":["T"],
+    "Members":{
+        "Method":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Overload":[
+                {
+                    "args":[
+                        {
+                            "name":"overloadARG",
+                            "type":"T",
+                            "description":{
+                                "en":"overload working like typeData with type 'function'",
+                                "ru":"overload работает как в typeData с типом 'function'"
+                            },"generics":["string"]
+                        }
+                    ],"returns":[
+                        {
+                            "name":"overloadReturn",
+                            "type":"string"
+                        }
+                    ]
+                }
+            ],
+            "Args":[
+                {
+                    "name":"argName",
+                    "type":"Test",
+                    "generics":["string"],
+                    "description":{
+                        "en":"Arg in test method",
+                        "ru":"Параметр в тестовом методе"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"returnName",
+                    "type":"function",
+                    "typeData":{
+                        "args":[
+                            {
+                                "name":"argInFuncName",
+                                "type":"T",
+                                "description":{
+                                    "en":"...",
+                                    "ru":"Какой-то ужас"
+                                },"generics":["string"]
+                            }
+                        ],"returns":[
+                            {
+                                "name":"returnInFuncName",
+                                "type":"string",
+                                "description":{
+                                    "en":"...",
+                                    "ru":"сажу от-йокаК"
+                                }
+                            }
+                        ]
+                    },
+                    "generics":["string"],
+                    "description":{
+                        "en":"Function in test method",
+                        "ru":"Как и в args, но здесь для демонстрации функция"
+                    }
+                }
+            ],
+            "Description":{
+                "en":"Method in test class",
+                "ru":"Метод в тестовом классе"
+            }
+        },
+        "Name":{
+            "memberType":"Property",
+            "valueType":"T?",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Property in test class",
+                "ru":"Параметр в тестовом классе, а ещё он может быть nil"
+            }, "valueGenerics":["string"]
+        },
+        "Event":{
+            "memberType":"Event",
+            "Description":{
+                "en":"Property in test class",
+                "ru":"Параметр в тестовом классе, а ещё он может быть nil"
+            }, "Args":[
+                {
+                    "name":"eventArgName",
+                    "type":"string",
+                    "generics":["string"],
+                    "description":{
+                        "en":"Can be also with typeData",
+                        "ru":"Может быть также с typeData"
+                    }
+                }
+            ]
+        }
+    }
+}

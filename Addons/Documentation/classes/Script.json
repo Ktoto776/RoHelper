@@ -1,7 +1,41 @@
 {
     "ClassName":"Script",
-    "Generics":["T"],
-    "Properties":{},
-    "Methods":{},
-    "Events":{}
+    "Members":{
+        "addonSettingsChanged":{
+            "memberType":"Event",
+            "Args":[
+                {
+                    "name":"settingsGroupName",
+                    "type":"string",
+                    "description":{
+                        "en":"Settings group name",
+                        "ru":"Название группы настроек"
+                    }
+                },{
+                    "name":"settingName",
+                    "type":"string",
+                    "description":{
+                        "en":"Setting name",
+                        "ru":"Название настройки"
+                    }
+                },{
+                    "name":"value",
+                    "type":"any",
+                    "description":{
+                        "en":"New value of this setting",
+                        "ru":"Новое значение этой настройки"
+                    }
+                }
+            ] 
+        },"settings":{
+            "memberType":"Property",
+            "isReadOnly":true,
+            "valueType":"table",
+            "dType":"{[string]:{[string]:Setting}}",
+            "Description":{
+                "en":"A settings table, where the first layer consists of groups, and the second layer contains the actual settings.",
+                "ru":"Таблица настроек, где 1 слой - группы, а второй уже сами настройки"
+            }
+        }
+    }
 }

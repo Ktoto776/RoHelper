@@ -27,7 +27,6 @@ end)
 --     print("ONCE")
 -- end)
 
-
 print(_ENV.type(script.settings),type(script))
 for k,v in pairs(script.settings) do
     print("Group:",k)

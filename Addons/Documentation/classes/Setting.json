@@ -1,0 +1,26 @@
+{
+    "ClassName":"Setting",
+    "Members":{
+        "onValueChanged":{
+            "memberType":"Event",
+            "Args":[
+                {
+                    "name":"value",
+                    "type":"any",
+                    "description":{
+                        "en":"New value of this setting",
+                        "ru":"Новое значение этой настройки"
+                    }
+                }
+            ] 
+        },"value":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"any",
+            "Description":{
+                "en":"Value of this setting",
+                "ru":"Значение этой настройки"
+            }
+        }
+    }
+}

@@ -1,0 +1,69 @@
+{
+    "ClassName":"task",
+    "Members":{
+        "wait":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"durationInSecs",
+                    "type":"number",
+                    "description":{
+                        "en":"The time for wait in seconds",
+                        "ru":"Время для задержки в секундах"
+                    }
+                }
+            ],
+            "Returns":[],
+            "Description":{
+                "en":"Freeze execution for a specified duration in seconds",
+                "ru":"Заморживает выполнение на заданное время в секундах"
+            }
+        },"spawn":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"func",
+                    "type":"function",
+                    "dType":"fun(...)",
+                    "description":{
+                        "en":"Function for parallel execution",
+                        "ru":"Функция для параллельного выполнения"
+                    }
+                }
+            ],
+            "Returns":[],
+            "Description":{
+                "en":"Execute a function in parallel",
+                "ru":"Выполнить функцию параллельно"
+            }
+        },"delay":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"durationInSecs",
+                    "type":"number",
+                    "description":{
+                        "en":"The time for wait in seconds",
+                        "ru":"Время для задержки в секундах"
+                    }
+                },{
+                    "name":"func",
+                    "type":"function",
+                    "dType":"fun(...)",
+                    "description":{
+                        "en":"Function for parallel execution",
+                        "ru":"Функция для параллельного выполнения"
+                    }
+                }
+            ],
+            "Returns":[],
+            "Description":{
+                "en":"Execute a function in parallel after a specified delay",
+                "ru":"Выполнить функцию параллельно через заданное время"
+            }
+        }
+    }
+}
