@@ -9,6 +9,22 @@
                 "en":"Is window opened",
                 "ru":"открыто ли окно"
             }
+        },"Destroying":{
+            "memberType":"Event",
+            "Args":[],
+            "Description":{
+                "en":"Fires when window destroying",
+                "ru":"Запускается когда окно удалено"
+            }
+        },"Destroy":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[],
+            "Returns":[],
+            "Description":{
+                "en":"Destroys window",
+                "ru":"Удаляет окно"
+            }
         }
     }
 }

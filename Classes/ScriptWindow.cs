@@ -16,11 +16,14 @@ class ScriptWindow
     public ScriptMethods methods;
     private ScriptWindowForm form;
     public bool isOpened;
+    public LuaScript.LuaEvent Destroying;
     public void Destroy(){
         form.Close();
+        Destroying.trigger();
     }
     public ScriptWindow(ScriptMethods methods){
         this.methods = methods;
+        Destroying = new(methods.script);
         form = new(this);
         if (Program.mainWindow.InvokeRequired)
         {

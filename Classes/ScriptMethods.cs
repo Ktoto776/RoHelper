@@ -35,6 +35,8 @@ class ScriptMethods{
     public ScriptWindow? createWindow(){
         if (permissions==null||!permissions.isPermissionGranted("create.window")) return null;
         var scriptWindow = new ScriptWindow(this);
+        scriptWindow.Destroying.theEvent += (_,_)=>
+            scriptWindows.Remove(scriptWindow);
         scriptWindows.Add(scriptWindow);
         return scriptWindow;
     }
