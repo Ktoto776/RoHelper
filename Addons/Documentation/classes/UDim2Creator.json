@@ -1,0 +1,80 @@
+{
+    "ClassName":"UDim2Creator",
+    "Members":{
+        "new":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"X",
+                    "type":"UDim"
+                },{
+                    "name":"Y",
+                    "type":"UDim"
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"UDim2",
+                    "type":"UDim2"
+                }
+            ],
+            "Description":{
+                "en":"Create new UDim2",
+                "ru":"Создаёт новый UDim2"
+            }
+        },"fromScale":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"XScale",
+                    "type":"number?",
+                    "description":{
+                        "en":"Scale of x [0-1]",
+                        "ru":"Размер x [0-1]"
+                    }
+                },{
+                    "name":"YScale",
+                    "type":"number?",
+                    "description":{
+                        "en":"Scale of y [0-1]",
+                        "ru":"Размер y [0-1]"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"UDim2",
+                    "type":"UDim2"
+                }
+            ]
+        },"fromOffset":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"XOffset",
+                    "type":"number?",
+                    "description":{
+                        "en":"X pixels",
+                        "ru":"X в пикселях"
+                    }
+                },{
+                    "name":"YOffset",
+                    "type":"number?",
+                    "description":{
+                        "en":"Y pixels",
+                        "ru":"Y в пикселях"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"UDim2",
+                    "type":"UDim2"
+                }
+            ]
+        }
+    }
+}

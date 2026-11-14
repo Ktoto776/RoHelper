@@ -1,13 +1,13 @@
 {
     "ClassName":"Window",
     "Members":{
-        "isOpened":{
+        "isVisible":{
             "memberType":"Property",
             "valueType":"boolean",
             "isReadOnly":false,
             "Description":{
-                "en":"Is window opened",
-                "ru":"открыто ли окно"
+                "en":"Is window visible",
+                "ru":"Видно ли окно"
             }
         },"Destroying":{
             "memberType":"Event",
@@ -24,6 +24,127 @@
             "Description":{
                 "en":"Destroys window",
                 "ru":"Удаляет окно"
+            }
+        },"VisibleChanged":{
+            "memberType":"Event",
+            "Args":[
+                {
+                    "name":"isVisible",
+                    "type":"boolean",
+                    "description":{
+                        "en":"Is window visible",
+                        "ru":"Видно ли окно"
+                    }
+                }
+            ],
+            "Description":{
+                "en":"Fires when window visible has been changed",
+                "ru":"Запускается когда видимость окна изменилась"
+            }
+        },"MinimumSize":{
+            "memberType":"Property",
+            "valueType":"PixelsSize",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Minimum window size in pixels",
+                "ru":"Минимальный размер окна в пикселях"
+            }
+        },"Size":{
+            "memberType":"Property",
+            "valueType":"PixelsSize",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Window size in pixels",
+                "ru":"Размер окна в пикселях"
+            }
+        },"MaximumSize":{
+            "memberType":"Property",
+            "valueType":"PixelsSize",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Maximum window size in pixels",
+                "ru":"Максимальный размер окна в пикселях"
+            }
+        },"isBorderFixed":{
+            "memberType":"Property",
+            "valueType":"boolean",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Is window border fixed",
+                "ru":"Зафиксирована ли граница окна"
+            }
+        },"MaximazeBox":{
+            "memberType":"Property",
+            "valueType":"boolean",
+            "isReadOnly":false,
+            "Description":{
+                "en":"Can the user maximize the window to full screen, ignored if MaximumSize is set",
+                "ru":"Может ли пользователь увеличить окно на весь экран, игнорируется если установлен MaximumSize"
+            }
+        },"SizeChanged":{
+            "memberType":"Event",
+            "Description":{
+                "en":"Fires when window size changed.",
+                "ru":"Запускается когда изменился размер окна"
+            }, "Args":[
+                {
+                    "name":"Size",
+                    "type":"PixelsSize"
+                }
+            ]
+        },"MaximumSizeChanged":{
+            "memberType":"Event",
+            "Description":{
+                "en":"Fires when window maximum size changed.",
+                "ru":"Запускается когда изменился максимальный размер окна"
+            }, "Args":[
+                {
+                    "name":"MaximumSize",
+                    "type":"PixelsSize"
+                }
+            ]
+        },"MinimumSizeChanged":{
+            "memberType":"Event",
+            "Description":{
+                "en":"Fires when window minimum size changed.",
+                "ru":"Запускается когда изменился минимальный размер окна"
+            }, "Args":[
+                {
+                    "name":"MinimumSize",
+                    "type":"PixelsSize"
+                }
+            ]
+        },"ClientSize":{
+            "memberType":"Property",
+            "valueType":"PixelsSize",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Window client size",
+                "ru":"Размер внутренней области окна"
+            }
+        },"ClientSizeChanged":{
+            "memberType":"Event",
+            "Description":{
+                "en":"Fires when window client size changed",
+                "ru":"Запускается когда изменился размер внутренней области окна"
+            }, "Args":[]
+        },"Show":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[],
+            "Returns":[],
+            "Description":{
+                "en":"Show the window",
+                "ru":"Показывает окно"
+            }
+        },"Hide":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[],
+            "Returns":[],
+            "Description":{
+                "en":"Hide the window",
+                "ru":"Скрывает окно"
             }
         }
     }

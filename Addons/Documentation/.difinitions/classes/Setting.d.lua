@@ -2,8 +2,8 @@
 ---@diagnostic disable: inject-field
 
 ---@class Setting
----@field displayName string #Отображаемое имя этой настройки
 ---@field value any #Значение этой настройки
+---@field displayName string #Отображаемое имя этой настройки
 local Setting={}
 
 

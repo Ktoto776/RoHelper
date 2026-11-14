@@ -1,0 +1,14 @@
+{
+    "ClassName":"UDim2",
+    "Members":{
+        "X":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"UDim"
+        },"Y":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"UDim"
+        }
+    }
+}

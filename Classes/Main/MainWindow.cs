@@ -102,8 +102,7 @@ class MainWindow : Form
         MinimumSize = new Size(leftPanelWidth+255,buttonsSize+borderHeight+5);
         using (Stream? iconStream = Assembly.GetExecutingAssembly().
             GetManifestResourceStream("RoHelper.resources.icon.ico")){
-            if (iconStream != null)
-            {
+            if (iconStream != null){
                 Icon = new Icon(iconStream);
             }
         }
@@ -126,7 +125,7 @@ class MainWindow : Form
     {
         base.OnLoad(e);
         // Save
-        var data = Program.appData.getWindowData("MAIN");
+        var data = Program.appData.getWindowData("_MAIN");
         if (data!=null){
             Size = new Size(data.Width,data.Height);
             Location = new Point(data.X,data.Y);
@@ -143,7 +142,7 @@ class MainWindow : Form
             data.Y = this.Location.Y;
             data.Width = this.Size.Width;
             data.Height = this.Size.Height;
-            Program.appData.WindowData["MAIN"] = data;
+            Program.appData.WindowData["_MAIN"] = data;
         }
         base.OnFormClosing(e);
     }

@@ -23,6 +23,7 @@ static class Program
         // RunWindow
         mainWindow = new MainWindow();
         // Addons
+        UserData.RegisterAssembly(Assembly.GetExecutingAssembly());
         UserData.RegisterType<ScriptMethods>();
         UserData.RegisterType<LuaScript.LuaEvent>();
         UserData.RegisterType<LuaSetting>();

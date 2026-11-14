@@ -1,0 +1,58 @@
+{
+    "ClassName":"PixelsSizeCreator",
+    "Members":{
+        "new":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"Width",
+                    "type":"number?",
+                    "description":{
+                        "en":"Width in pixels",
+                        "ru":"Ширина в пикселях"
+                    }
+                },{
+                    "name":"Height",
+                    "type":"number?",
+                    "description":{
+                        "en":"Height in pixels",
+                        "ru":"Высота в пикселях"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"PixelsSize",
+                    "type":"PixelsSize"
+                }
+            ],
+            "Description":{
+                "en":"Create new PixelsSize",
+                "ru":"Создаёт новый PixelsSize"
+            }
+        },"fromScreenScale":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"WidthScale",
+                    "type":"number?"
+                },{
+                    "name":"HeightScale",
+                    "type":"number?"
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"PixelsSize",
+                    "type":"PixelsSize"
+                }
+            ],
+            "Description":{
+                "en":"Create new PixelsSize from screen size",
+                "ru":"Создаёт новый PixelsSize из размера экрана"
+            }
+        }
+    }
+}

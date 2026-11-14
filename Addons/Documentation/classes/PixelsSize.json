@@ -1,0 +1,22 @@
+{
+    "ClassName":"PixelsSize",
+    "Members":{
+        "Width":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"number",
+            "Description":{
+                "en":"Width in pixels",
+                "ru":"Ширина в пикселях"
+            }
+        },"Height":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"number",
+            "Description":{
+                "en":"Height in pixels",
+                "ru":"Высота в пикселях"
+            }
+        }
+    }
+}

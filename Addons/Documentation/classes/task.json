@@ -75,6 +75,15 @@
                 "en":"Skips this script task in order to execute other tasks more quickly",
                 "ru":"Пропускает эту задачу скрипта, чтобы быстрее выполнить другие задачи"
             }
+        },"exit":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[],
+            "Returns":[],
+            "Description":{
+                "en":"Close this thread",
+                "ru":"Закрывает этот поток"
+            }
         }
     }
 }

@@ -1,11 +1,5 @@
 ---@diagnostic disable: missing-return
 
---[[Выполнить функцию параллельно через заданное время]]
----@overload fun(durationInSecs:number,func:fun(...),...)
----@param durationInSecs number #Выполнить функцию параллельно через заданное время
----@param func fun(...) #Выполнить функцию параллельно через заданное время
-function delay(durationInSecs,func) end
-
 --[[Выполнить функцию параллельно]]
 ---@overload fun(func:fun(...),...)
 ---@param func fun(...) #Выполнить функцию параллельно
@@ -22,6 +16,24 @@ task = nil
 --[[Класс скрипта]]
 ---@type Script
 script = nil
+
+--[[Выполнить функцию параллельно через заданное время]]
+---@overload fun(durationInSecs:number,func:fun(...),...)
+---@param durationInSecs number #Выполнить функцию параллельно через заданное время
+---@param func fun(...) #Выполнить функцию параллельно через заданное время
+function delay(durationInSecs,func) end
+
+--[[Класс создания нового UDim2]]
+---@type UDim2Creator
+UDim2 = nil
+
+--[[Класс создания нового UDim]]
+---@type UDimCreator
+UDim = nil
+
+--[[Класс создания нового PixelsSize]]
+---@type PixelsSizeCreator
+PixelsSize = nil
 
 --[[Получает тип обьекта или класса]]
 ---@param object any? #Получает тип обьекта или класса

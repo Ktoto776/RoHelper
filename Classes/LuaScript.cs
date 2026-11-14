@@ -168,14 +168,11 @@ class LuaScript
             DynValue coroutine = luaScript.CreateCoroutine(func);
             lock (_lock)Coroutines.Add(coroutine.Coroutine);
         });
-        luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj) =>{
-            if (obj is LuaEvent) return "Event";
-            if (obj==scriptMethods) return "Script";
-            if (obj==scriptMethods.permissions) return "Permissions";
-            if (obj is ScriptWindow) return "Window";
-            if (obj is ScriptMethods.LuaTrayMenu) return "TrayButton";
-            return "unknown";
-        });
+        luaScript.Globals["UDim"] = new UDim_Creator(luaScript);
+        luaScript.Globals["PixelsSize"] = new PixelsSize_Creator(luaScript);
+        luaScript.Globals["UDim2"] = new UDim2_Creator(luaScript);
+        luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj)=>
+            {return GetLuaClassName(obj.GetType());});
         luaScript.Globals["script"] = scriptMethods;
         luaScript.Globals["classGetMembersWriteTypes"] = (Func<object?,Table?>)((obj)=>{
             if (obj==null) return null;
@@ -185,7 +182,7 @@ class LuaScript
                 result[member.Name] = true;
                 if (member.MemberType==MemberTypes.Property){
                     PropertyInfo prop = (PropertyInfo)member;
-                    if (prop.CanWrite) result[member.Name] = GetLuaTypeName(prop.PropertyType);
+                    if (prop.CanWrite) result[member.Name] = GetLuaType(prop.PropertyType);
                 }
             }
             return result;
@@ -248,6 +245,27 @@ class LuaScript
                 lock(script._lock)script._PausedCoroutines.Add(Running);
             }
         }
+    }
+    public static string GetLuaType(Type t){
+        var luaType = GetLuaTypeName(t);
+        if (luaType!="userdata")return luaType;
+        return GetLuaClassName(t);
+    }
+    public static Dictionary<Type,string> typesNameInLua = new(){
+        [typeof(LuaEvent)]="Event",
+        [typeof(ScriptMethods)]="Script",
+        [typeof(LuaPermissions)]="Permissions",
+        [typeof(ScriptWindow)]="Window",
+        [typeof(ScriptMethods.LuaTrayMenu)]="TrayButton",
+        [typeof(CSharpLuaError)]="error",
+        [typeof(UDim)]="UDim",
+        [typeof(UDim2)]="UDim2",
+        [typeof(PixelsSize)]="PixelsSize",
+        [typeof(UDim_Creator)]="UDimCreator",
+        [typeof(PixelsSize_Creator)]="PixelsSizeCreator",
+    }; public static string GetLuaClassName(Type t){
+        if (typesNameInLua.TryGetValue(t,out var typeName)) return typeName;
+        return "unknown";
     }
     // работай чат джепете
     public static string GetLuaTypeName(Type t)

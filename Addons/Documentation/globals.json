@@ -6,6 +6,27 @@
             "ru":"Класс скрипта",
             "en":"Script class"
         }
+    },"UDim":{
+        "type":"Class",
+        "ClassName":"UDimCreator",
+        "Description":{
+            "ru":"Класс создания нового UDim",
+            "en":"Class for creating a new UDim"
+        }
+    },"UDim2":{
+        "type":"Class",
+        "ClassName":"UDim2Creator",
+        "Description":{
+            "ru":"Класс создания нового UDim2",
+            "en":"Class for creating a new UDim2"
+        }
+    },"PixelsSize":{
+        "type":"Class",
+        "ClassName":"PixelsSizeCreator",
+        "Description":{
+            "ru":"Класс создания нового PixelsSize",
+            "en":"Class for creating a new PixelsSize"
+        }
     }, "task":{
         "type":"Class",
         "ClassName":"task",

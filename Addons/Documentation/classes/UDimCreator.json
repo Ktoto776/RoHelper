@@ -1,0 +1,74 @@
+{
+    "ClassName":"UDimCreator",
+    "Members":{
+        "new":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"Scale",
+                    "type":"number?",
+                    "description":{
+                        "en":"Scale of this UDim [0-1]",
+                        "ru":"Размер в отношении к максимальному этого UDim [0-1]"
+                    }
+                },{
+                    "name":"Offset",
+                    "type":"number?",
+                    "description":{
+                        "en":"Offset in pixels of this UDim",
+                        "ru":"Смещение в пикселях этого UDim"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"UDim",
+                    "type":"UDim"
+                }
+            ],
+            "Description":{
+                "en":"Create new UDim",
+                "ru":"Создаёт новый UDim"
+            }
+        },"fromScale":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"Scale",
+                    "type":"number",
+                    "description":{
+                        "en":"Scale of this UDim [0-1]",
+                        "ru":"Размер в отношении к максимальному этого UDim [0-1]"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"UDim",
+                    "type":"UDim"
+                }
+            ]
+        },"fromOffset":{
+            "memberType":"Method",
+            "isWithSelf":false,
+            "Args":[
+                {
+                    "name":"Offset",
+                    "type":"number",
+                    "description":{
+                        "en":"Offset in pixels of this UDim",
+                        "ru":"Смещение в пикселях этого UDim"
+                    }
+                }
+            ],
+            "Returns":[
+                {
+                    "name":"UDim",
+                    "type":"UDim"
+                }
+            ]
+        }
+    }
+}

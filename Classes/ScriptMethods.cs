@@ -32,9 +32,9 @@ class ScriptMethods{
         bindLTMToAddonName();
         return luaTrayMenu;
     }
-    public ScriptWindow? createWindow(){
+    public ScriptWindow? createWindow(string WindowName){
         if (permissions==null||!permissions.isPermissionGranted("create.window")) return null;
-        var scriptWindow = new ScriptWindow(this);
+        var scriptWindow = new ScriptWindow(this,WindowName);
         scriptWindow.Destroying.theEvent += (_,_)=>
             scriptWindows.Remove(scriptWindow);
         scriptWindows.Add(scriptWindow);

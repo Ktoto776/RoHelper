@@ -1,0 +1,22 @@
+{
+    "ClassName":"UDim",
+    "Members":{
+        "Scale":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"number",
+            "Description":{
+                "en":"Scale of this UDim [0-1]",
+                "ru":"Размер в отношении к максимальному этого UDim [0-1]"
+            }
+        },"Offset":{
+            "memberType":"Property",
+            "isReadOnly":false,
+            "valueType":"number",
+            "Description":{
+                "en":"Offset in pixels of this UDim",
+                "ru":"Смещение в пикселях этого UDim"
+            }
+        }
+    }
+}

@@ -1,21 +1,17 @@
-﻿local stopped = false
+﻿local trayButton = script:getTrayMenuButton()
+local window = script:createWindow("")
 
-task.spawn(function()
-    print(123)
-    while not stopped do
-        wait(0.1)
-        print("CLICK TRAY BUTTON")
-    end
-end)
-print(321)
+if not window or not trayButton then error("PERMISSIONS ERROR") end
 
-local trayButton = script:getTrayMenuButton()
-if not trayButton then return end
-trayButton.Clicked:Wait()
+local size = PixelsSize.fromScreenScale(0.5,0.5)
+window.MinimumSize = size
 
-script:createWindow()
-
-stopped = true
 trayButton.Clicked:Connect(function()
-    print("LOL")
+    print("Tray button click")
+    window:Show()
+end)
+
+task.delay(15,function()
+    print("Destroyed")
+    window:Destroy()
 end)
