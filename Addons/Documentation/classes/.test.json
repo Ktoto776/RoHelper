@@ -75,6 +75,26 @@
                 "ru":"Метод в тестовом классе"
             }
         },
+        "MinimalMethod":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[
+                {
+                    "name":"argName",
+                    "type":"Test",
+                    "generics":["string"],
+                    "description":{
+                        "en":"Arg in test method",
+                        "ru":"Параметр в тестовом методе"
+                    }
+                }
+            ],
+            "Returns":[],
+            "Description":{
+                "en":"Method in test class",
+                "ru":"Метод в тестовом классе"
+            }
+        },
         "Name":{
             "memberType":"Property",
             "Permissions":[],

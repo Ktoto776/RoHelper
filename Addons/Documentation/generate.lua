@@ -288,13 +288,15 @@ for _,fname in pairs(listfiles(DocumentationClassesPath)) do
                     type = "unknown"
                     warn("Class "..className.." has unknown member '"..name.."'")
                 else type = member.dType or getType(type,member.valueGenerics,member.typeData)
-                end local memberData = (permissions or"").."---@field "..name.." "..type
+                end local memberData = "---@field "..name.." "..type.."#"
                 if member.Description then
                     if member.Description[descriptionLang] then
-                        memberData = memberData.." #"..member.Description[descriptionLang]
+                        memberData = memberData..member.Description[descriptionLang]
                     elseif member.Description[defaultDescriptionLang] then
-                        memberData = memberData.." #"..member.Description[defaultDescriptionLang]
+                        memberData = memberData..member.Description[defaultDescriptionLang]
                     end
+                end if permissions then
+                    memberData=memberData.." "..string.gsub(string.gsub(permissions,"\n",""),"%-%-","",1)
                 end data = data.."\n"..memberData
             end
         end

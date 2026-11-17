@@ -4,6 +4,7 @@
         <!-- <Compile Update="Form1.cs">
             <SubType>Form</SubType>
         </Compile> -->
+        <Compile Remove="Classes/_OLD/**/*.cs" />
         <EmbeddedResource Include="resources/icon.ico"/>
         <EmbeddedResource Include="resources/globals.lua"/>
         <EmbeddedResource Include="translations/*.json"/>

@@ -6,6 +6,13 @@
             "ru":"Класс скрипта",
             "en":"Script class"
         }
+    },"Roblox":{
+        "type":"Class",
+        "ClassName":"Roblox",
+        "Description":{
+            "ru":"Класс для роблокса",
+            "en":"Roblox class"
+        }
     },"UDim":{
         "type":"Class",
         "ClassName":"UDimCreator",

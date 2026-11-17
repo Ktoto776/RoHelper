@@ -1,16 +1,14 @@
----@diagnostic disable: missing-return
 ---@diagnostic disable: inject-field
+---@diagnostic disable: missing-return
 
 ---@class Script
----@field settings {[string]:{[string]:Setting}} #Таблица настроек, где 1 слой - группы, а второй уже сами настройки
----@field permissions Permissions #Разрешения скрипта
+---@field settings {[string]:{[string]:Setting}}#Таблица настроек, где 1 слой - группы, а второй уже сами настройки
+---@field permissions Permissions#Разрешения скрипта
 local Script={}
 
---[[Возвращает окно]]
---* **[Требуются разрешения: create.window]**
----@param windowName string #Имя окна, Основное имя окна обычно ''
----@return Window? window #Новое окно, если разрешение не выдано => вернёт nil
-function Script:createWindow(windowName)end
+--[[Возвращает кнопку в трее]]
+---@return TrayButton? trayButton #Кнопка в меню трея, если разрешение не выдано => вернёт nil
+function Script:getTrayMenuButton()end
 
 
 ---@diagnostic disable-next-line: undefined-doc-name
@@ -28,6 +26,8 @@ function Script.addonSettingsChanged:Once(callback) end
 ---@return any value #Новое значение этой настройки
 function Script.addonSettingsChanged:Wait() end
 
---[[Возвращает кнопку в трее]]
----@return TrayButton? trayButton #Кнопка в меню трея, если разрешение не выдано => вернёт nil
-function Script:getTrayMenuButton()end
+--[[Возвращает окно]]
+--* **[Требуются разрешения: create.window]**
+---@param windowName string #Имя окна, Основное имя окна обычно ''
+---@return Window? window #Новое окно, если разрешение не выдано => вернёт nil
+function Script:createWindow(windowName)end

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using MoonSharp.Interpreter;
+using MoonSharp.Interpreter.Debugging;
 
 namespace RoHelper;
 
@@ -16,20 +17,58 @@ class LuaScript
                 if (stream==null){
                     Console.WriteLine("globals.lua is null");
                     luaCodeForGlobals = "";
-                }else luaCodeForGlobals = (new StreamReader(stream)).ReadToEnd().Replace("\n"," ");
+                }else{
+                    luaCodeForGlobals = "do "+(new StreamReader(stream)).ReadToEnd()+"\nend";
+                }
             }
         } return luaCodeForGlobals;
     }
     private DynValue? MainFunction;
     public string scriptName = "";
-    public Script luaScript = new Script();
+    public Script luaScript;
     private bool _isCompiled = false;
     public bool isCompiled{get=>_isCompiled;}
     public SyntaxErrorException? SyntaxError;
-    public void Compile(string luaCode){
-        var Code = "return function()"+getGlobalLuaCode()+" "+luaCode+"\nend";
+    private string? lastError;
+    public void InitGlobals(){
+        luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj)=>
+            {return GetLuaClassName(obj.GetType());});
+        luaScript.Globals["classGetMembersWriteTypes"] = (Func<object?,Table?>)((obj)=>{
+            if (obj==null) return null;
+            var result = new Table(luaScript); //<string,bool|string>
+            var members = obj.GetType().GetMembers();
+            foreach (var member in members){
+                result[member.Name] = true;
+                if (member.MemberType==MemberTypes.Property){
+                    PropertyInfo prop = (PropertyInfo)member;
+                    if (prop.CanWrite) result[member.Name] = GetLuaType(prop.PropertyType);
+                }
+            }
+            return result;
+        });
+        luaScript.Globals["_changeEnvironment"] = (Action<string,DynValue>)((name,value)=>{
+            luaScript.Globals[name] = value;
+        });
+        luaScript.Globals["_setLastError"] = (Action<string>)((err)=>{
+            lastError = err;
+        });
         try{
-            MainFunction = luaScript.DoString(Code);
+            luaScript.DoString(getGlobalLuaCode(),null,"_GLOBALS");
+        }catch(ScriptRuntimeException e){
+            Console.WriteLine("Error when init globals: "+e.DecoratedMessage);
+        }catch(SyntaxErrorException e){
+            Console.WriteLine("Syntax error when init globals: "+e.DecoratedMessage);
+        }
+        luaScript.Globals["_changeEnvironment"] = DynValue.Nil;
+        luaScript.Globals["_setLastError"] = DynValue.Nil;
+        luaScript.Globals["getClassTypeName"] = DynValue.Nil;// Lua alternative: typeof()
+        globalsInited = true;
+    }
+    public bool globalsInited = false;
+    public void Compile(string luaCode){
+        if (!globalsInited) InitGlobals();
+        try{
+            MainFunction = luaScript.LoadString(luaCode,null,scriptName);
             _isCompiled = true;
         }catch(SyntaxErrorException exc){
             Console.WriteLine("LuaScript syntax error: "+exc.DecoratedMessage);
@@ -59,8 +98,13 @@ class LuaScript
     private Dictionary<Coroutine, DateTime> _sleepingCoroutines = new();
     public Dictionary<Coroutine, DynValue[]> CoroutinesArgs = new();
     private HashSet<Coroutine> _PausedCoroutines = new();
+    private CoreModules defaultModules = CoreModules.Preset_HardSandbox | CoreModules.Metatables |
+            CoreModules.ErrorHandling | CoreModules.Coroutine | CoreModules.Json | CoreModules.OS_Time;
+    public LuaConsole console;
     public LuaScript(){
+        luaScript = new(defaultModules);
         scriptMethods = new(this);
+        console = new(this);
         MakeGlobalENV();
         Task.Run(()=>{
             while (true){
@@ -70,7 +114,10 @@ class LuaScript
                     Coroutine[] snapshot;
                     lock (_lock) snapshot = Coroutines.ToArray();
                     foreach (Coroutine coroutine in snapshot){
-                        if (isScrRunning&&Coroutines.Contains(coroutine)){
+                        if (!isScrRunning) break;
+                        bool Contains;
+                        lock (_lock) Contains = Coroutines.Contains(coroutine);
+                        if (Contains){
                             lock (_lock){
                                 if (_PausedCoroutines.Contains(coroutine)) continue;
                                 if (_sleepingCoroutines.TryGetValue(coroutine, out var resumeTime)){
@@ -97,8 +144,8 @@ class LuaScript
                                     }
                                 }
                             }catch(ScriptRuntimeException exc){
-                                Console.WriteLine("LuaScript error: "+exc.DecoratedMessage);
                                 lock(_lock) Coroutines.Remove(coroutine);
+                                console.printException(exc);
                             }
                         }
                     } RunningCoroutine = null;
@@ -133,6 +180,7 @@ class LuaScript
         DynValue coroutine = luaScript.CreateCoroutine(MainFunction);
         lock (_lock) Coroutines.Add(coroutine.Coroutine);
         _runningEvent.Set();
+        _newCoroutineStarted.Set();
     }
     public event EventHandler? scriptStopped;
     public void StopScript(){
@@ -150,8 +198,7 @@ class LuaScript
     public ScriptMethods scriptMethods;
     private void MakeGlobalENV(){
         luaScript.Globals["print"] = (Action<object?>)((o)=>{
-            var str = (o ?? "nil").ToString();
-            Console.WriteLine(scriptName+": "+str);
+            console.rawPrint((o??"nil").ToString()??"null");
         });
         luaScript.Globals["wait"] = (Action<double>)((s)=>{
             var coroutine = RunningCoroutine;
@@ -167,26 +214,12 @@ class LuaScript
         luaScript.Globals["spawn"] = (Action<DynValue>)((func) =>{
             DynValue coroutine = luaScript.CreateCoroutine(func);
             lock (_lock)Coroutines.Add(coroutine.Coroutine);
+            _newCoroutineStarted.Set();
         });
         luaScript.Globals["UDim"] = new UDim_Creator(luaScript);
         luaScript.Globals["PixelsSize"] = new PixelsSize_Creator(luaScript);
         luaScript.Globals["UDim2"] = new UDim2_Creator(luaScript);
-        luaScript.Globals["getClassTypeName"] = (Func<object,string>)((obj)=>
-            {return GetLuaClassName(obj.GetType());});
         luaScript.Globals["script"] = scriptMethods;
-        luaScript.Globals["classGetMembersWriteTypes"] = (Func<object?,Table?>)((obj)=>{
-            if (obj==null) return null;
-            var result = new Table(luaScript); //<string,bool|string>
-            var members = obj.GetType().GetMembers();
-            foreach (var member in members){
-                result[member.Name] = true;
-                if (member.MemberType==MemberTypes.Property){
-                    PropertyInfo prop = (PropertyInfo)member;
-                    if (prop.CanWrite) result[member.Name] = GetLuaType(prop.PropertyType);
-                }
-            }
-            return result;
-        });
     }
     [MoonSharpUserData]
     public class LuaEvent{
@@ -263,6 +296,10 @@ class LuaScript
         [typeof(PixelsSize)]="PixelsSize",
         [typeof(UDim_Creator)]="UDimCreator",
         [typeof(PixelsSize_Creator)]="PixelsSizeCreator",
+        [typeof(LuaProgramSync)]="Roblox",
+        [typeof(LuaLogReader)]="LogReader",
+        [typeof(JoinedGameData)]="JoinedGameData",
+        [typeof(LogLine)]="LogLine",
     }; public static string GetLuaClassName(Type t){
         if (typesNameInLua.TryGetValue(t,out var typeName)) return typeName;
         return "unknown";

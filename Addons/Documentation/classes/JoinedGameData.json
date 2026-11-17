@@ -1,0 +1,41 @@
+{
+    "ClassName":"JoinedGameData",
+    "Members":{
+        "isConnected":{
+            "memberType":"Property",
+            "valueType":"boolean",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Is roblox player connected to server",
+                "ru":"Подключён ли клиент роблокс к серверу"
+            }
+        },
+        "PlaceId":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"PlaceId of the most recently connected server; if no connections have been made, it is ''",
+                "ru":"PlaceId последнего подключённого сервер, если подключения не выполнялись =''"
+            }
+        },
+        "JobId":{
+            "memberType":"Property",
+            "valueType":"T?",
+            "isReadOnly":true,
+            "Description":{
+                "en":"JobId of the most recently connected server; if no connections have been made, it is ''",
+                "ru":"JobId последнего подключённого сервер, если подключения не выполнялись =''"
+            }
+        },
+        "ServerIP":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"IP of the most recently connected server; if no connections have been made, it is ''",
+                "ru":"IP последнего подключённого сервер, если подключения не выполнялись =''"
+            }
+        }
+    }
+}

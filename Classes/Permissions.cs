@@ -19,7 +19,7 @@ class LuaPermissions{
     public bool isPermissionGranted(string permission){
         return GrantedPermissions.Contains(permission);
     } [MoonSharpHidden]
-    static public HashSet<string> registeredPermissions =["create.window","create.tray_button"];
+    static public HashSet<string> registeredPermissions =["create.window","create.tray_button","os.time"];
     [MoonSharpHidden]
     static void registerPermission(string permission){
         registeredPermissions.Add(permission);

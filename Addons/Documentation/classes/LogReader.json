@@ -1,0 +1,79 @@
+{
+    "ClassName":"LogReader",
+    "Members":{
+        "NewRawLineEvent":{
+            "memberType":"Event",
+            "Permissions":["read_logs.all"],
+            "Description":{
+                "en":"Fires by a new line in the Roblox log, with raw line; event =nil, if permission isn't granted",
+                "ru":"Запускается при новой строке из роблокс лога, с сырой строкой, без разрешения вместо эвента nil"
+            }, "Args":[
+                {
+                    "name":"rawLine",
+                    "type":"string",
+                    "description":{
+                        "en":"New raw line from roblox log",
+                        "ru":"Новая необработанная строка из роблокс лога"
+                    }
+                }
+            ]
+        },"NewLogLineEvent":{
+            "memberType":"Event",
+            "Permissions":["read_logs.all"],
+            "Description":{
+                "en":"Fires by a new line in the Roblox log; event =nil, if permission isn't granted",
+                "ru":"Запускается при новой строке из роблокс лога, без разрешения вместо эвента nil"
+            }, "Args":[
+                {
+                    "name":"logLine",
+                    "type":"LogLine",
+                    "description":{
+                        "en":"New line from roblox log",
+                        "ru":"Новая строка из роблокс лога"
+                    }
+                }
+            ]
+        },
+        "JoinedToPlace":{
+            "memberType":"Event",
+            "Permissions":["read_logs.joined_event"],
+            "Description":{
+                "en":"Fires when client joining to server; event =nil, if permission isn't granted",
+                "ru":"Запускается когда клиент заходит на сервер, без разрешение вместо эвента nil"
+            }, "Args":[]
+        },
+        "LeftEvent":{
+            "memberType":"Event",
+            "Permissions":["read_logs.left_event"],
+            "Description":{
+                "en":"Fires when client left from game to main menu; event =nil, if permission isn't granted",
+                "ru":"Запускается когда клиент вышел из игры в основное меню, без разрешение вместо эвента nil"
+            }, "Args":[]
+        },
+        "SuccessLeftEvent":{
+            "memberType":"Event",
+            "Permissions":["read_logs.left_event"],
+            "Description":{
+                "en":"Fires when client left from server without error; event =nil, if permission isn't granted",
+                "ru":"Запускается когда клиент вышел с сервера без ошибок, без разрешение вместо эвента nil"
+            }, "Args":[]
+        },
+        "Disconnected":{
+            "memberType":"Event",
+            "Permissions":["read_logs.left_event"],
+            "Description":{
+                "en":"Fires when client disconnected(error/kick); event =nil, if permission isn't granted",
+                "ru":"Запускается когда клиент отключился(кикнут или ошибка), без разрешение вместо эвента nil"
+            }, "Args":[
+                {
+                    "name":"reason",
+                    "type":"string",
+                    "description":{
+                        "en":"Disconnect reason",
+                        "ru":"Причина отключения"
+                    }
+                }
+            ]
+        }
+    }
+}

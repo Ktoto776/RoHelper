@@ -1,0 +1,23 @@
+{
+    "ClassName":"Roblox",
+    "Members":{
+        "joinedGameData":{
+            "memberType":"Property",
+            "Permissions":["roblox.joined_game"],
+            "valueType":"JoinedGameData",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Data for the server on which the player is located, if there is no permission, it will be =nil",
+                "ru":"Данные сервера на котором находится игрок, если нету разрешения будет =nil"
+            }
+        },"logReader":{
+            "memberType":"Property",
+            "valueType":"LogReader",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Class for reading logs",
+                "ru":"Класс для чтения логов"
+            }
+        }
+    }
+}

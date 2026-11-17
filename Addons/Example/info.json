@@ -7,10 +7,13 @@
     "versionName":"optional [1.0]",
     "versionBuild":1,
     "Permissions":[
-        "keyboard.read",
-        "keyboard.write",
         "create.window",
-        "create.tray_button"
+        "create.tray_button",
+        "os.time",
+        "read_logs.all",
+        "read_logs.join_event",
+        "roblox.joined_server",
+        "read_logs.left_event"
     ],
     "UserPermissions":[
         "keyboard.fullRead",

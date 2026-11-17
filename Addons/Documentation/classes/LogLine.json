@@ -1,0 +1,78 @@
+{
+    "ClassName":"LogLine",
+    "Members":{
+        "Data":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Data of log line",
+                "ru":"Данные строки лога"
+            }
+        },"Sender":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Sender of log line, For example: 'FLog::Output'",
+                "ru":"Отправитель строки лога, например: 'FLog::Output'"
+            }
+        },"TimeISO":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Time, ISO 8601 format",
+                "ru":"Время в формате ISO 8601"
+            }
+        },"timestamp":{
+            "memberType":"Property",
+            "valueType":"number",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Timestamp of this log line",
+                "ru":"Время(timestamp) в секундах этой строки лога"
+            }
+        },"timeTag":{
+            "memberType":"Property",
+            "valueType":"number",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Time tag",
+                "ru":"Временная метка указанная внутри этой строки лога"
+            }
+        },"contextId":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Third param from this log",
+                "ru":"Третий параметр этого лога"
+            }
+        },"logLevel":{
+            "memberType":"Property",
+            "valueType":"number",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Log level",
+                "ru":"Уровень лога"
+            }
+        },"logType":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Log type, for example: 'Info'",
+                "ru":"Тип лога, например: 'Info'"
+            }
+        },"rawLine":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Raw line of this log",
+                "ru":"Необработанная строка этого лога"
+            }
+        }
+    }
+}

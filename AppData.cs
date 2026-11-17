@@ -12,7 +12,7 @@ class AppData_WindowSave
 
 class AppData
 {
-    static string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    public static string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
     string AppFolder = Path.Combine(AppDataPath, "RoHelper");
     public Dictionary<string,AppData_WindowSave> WindowData = new Dictionary<string, AppData_WindowSave>();
     public AppData()

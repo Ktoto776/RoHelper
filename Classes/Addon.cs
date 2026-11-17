@@ -41,6 +41,9 @@ class Addon{
             }
         }else loadedAddons[addonName] = this;
     }
+    public void initAddonMethods(){
+        luaScript.luaScript.Globals["Roblox"] = new LuaProgramSync(luaScript.scriptMethods);
+    }
     public bool addonIsLoaded(){
         if (isLoadedPrivate&&luaScript.isCompiled){
             SettingsButton.Visible = isLoadedPrivate;

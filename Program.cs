@@ -29,6 +29,10 @@ static class Program
         UserData.RegisterType<LuaSetting>();
         UserData.RegisterType<LuaPermissions>();
         UserData.RegisterType<ScriptWindow>();
+        UserData.RegisterType<LuaLogReader>();
+        UserData.RegisterType<LuaProgramSync>();
+        UserData.RegisterType<JoinedGameData>();
+        LogReader.StartReader();
         loadEmbeddedAddons();
         runLoadedAddons();
         Application.Run(mainWindow);
@@ -53,6 +57,7 @@ static class Program
                 if (stream != null){
                     try{
                         addon.loadInfoFromStream(stream,true);
+                        addon.initAddonMethods();
                     }catch{
                         Console.WriteLine("Error to load "+path+"*");
                     }
@@ -71,7 +76,7 @@ static class Program
     private static void runLoadedAddons(){
         foreach (KeyValuePair<string,Addon> pair in Addon.loadedAddons){
             Addon addon = pair.Value;
-            if (addon.addonIsLoaded()) Task.Run(addon.luaScript.RunScript);
+            if (addon.addonIsLoaded()) addon.luaScript.RunScript();
         }
     }
 }

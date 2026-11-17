@@ -6,7 +6,9 @@
     },
     "Permissions":[
         "create.tray_button",
-        "create.window"
+        "create.window",
+        "os.time",
+        "read_logs.all"
     ],
     "versionBuild":1,
     "Settings":{
