@@ -7,9 +7,9 @@ namespace RoHelper;
 class LuaLogReader{
     public LuaScript.LuaEvent? NewLogLineEvent;
     public LuaScript.LuaEvent? NewRawLineEvent;
-    public LuaScript.LuaEvent? JoinedToPlace;
-    public LuaScript.LuaEvent? LeftEvent;
-    public LuaScript.LuaEvent? SuccessLeftEvent;
+    public LuaScript.LuaEvent? Joining;
+    public LuaScript.LuaEvent? Joined;
+    public LuaScript.LuaEvent? Leaving;
     public LuaScript.LuaEvent? Disconnected;
 }
 
@@ -74,10 +74,6 @@ static class LogReader{
     public static string OldLogsFolder = Path.Combine(LogsFolder,"Old");
     public static int poolingDelay = 500;
     public static EventHandler<LogEventArgs>? logChanged;
-    public static EventHandler? joined;
-    public static EventHandler? user_left;
-    public static EventHandler<LogClientDisconnectedEventArgs>? disconnected;
-    public static EventHandler? user_success_left;
     public static void StartReader(){
         LuaPermissions.registeredPermissions.Add("read_logs.all");
         LuaPermissions.registeredPermissions.Add("read_logs.join_event");
@@ -119,6 +115,7 @@ static class LogReader{
                     Console.WriteLine("Error when reading log: " + ex.Message);
                 }
             }
+            LogStackAnalizator.checkTimeouts();
             Thread.Sleep(poolingDelay);
         }
     }
@@ -147,75 +144,27 @@ static class LogReader{
                 methods.permissions.GrantedPermissions.Add("read_logs.left_event");
         }
         if (methods.permissions.isPermissionGranted("read_logs.join_event")){
-            reader.JoinedToPlace = new(methods.script);
-            joined += (_,args)=>reader.JoinedToPlace.trigger();
+            reader.Joining = new(methods.script);
+            LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Joined,(objs)=>reader.Joining.trigger(objs));
+            reader.Joined = new(methods.script);
+            LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Joined,(objs)=>reader.Joined.trigger(objs));
         } if (methods.permissions.isPermissionGranted("read_logs.left_event")){
-            reader.LeftEvent = new(methods.script);
-            user_left += (_,_)=>reader.LeftEvent.trigger();
-            reader.SuccessLeftEvent = new(methods.script);
-            user_success_left += (_,_)=>reader.SuccessLeftEvent.trigger();
+            reader.Leaving = new(methods.script);
+            LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Leaving,(objs)=>reader.Leaving.trigger(objs));
             reader.Disconnected = new(methods.script);
-            disconnected += (_,args)=>reader.Disconnected.trigger([DynValue.NewString(args.reason)]);
+            LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Disconnected,(objs)=>reader.Disconnected.trigger(objs));
         }
         return reader;
     }
-    public static Regex JoinRegex = new(@"Joining game '([^']+)' place (\d+) at ([^\s]+)");
-    private const string DisconnedPrefix = "Client has been disconnected with reason: ";
     private static void whenNewLine(string rawLine,bool fireEvents){
         var line = new LogLine(rawLine);
+        if (line.isParsed){
+            var result = LogAnalizator.analizeLogLine(line);
+            result.FireLuaEvents();
+        }
         if (fireEvents){
             logChanged?.Invoke(rawLine,new LogEventArgs(rawLine,line));
-        } if (line.isParsed){
-            if(line.Sender=="DFLog::NetworkClient"&&line.Data.Contains("Client:Disconnect")){
-                if (!JoinedGame.isConnected){
-                    if(JoinedGame.isDisconnected){
-                        user_left?.Invoke(line,EventArgs.Empty);
-                        JoinedGame.isDisconnected = false;
-                    } return;
-                } JoinedGame.isConnected = false;
-                user_success_left?.Invoke(line,EventArgs.Empty);
-            }else if(line.Sender=="FLog::Network"){
-                if (line.Data.StartsWith(DisconnedPrefix)){
-                    if (!JoinedGame.isDisconnected){
-                        disconnected?.Invoke(line,new LogClientDisconnectedEventArgs(
-                            line.Data.Remove(0,DisconnedPrefix.Length)
-                        )); JoinedGame.isConnected = false;
-                        JoinedGame.isDisconnected = true;
-                    }
-                }
-            } else if(line.Sender=="FLog::Output"){ 
-                var JoinMatch = JoinRegex.Match(rawLine);
-                if (JoinMatch.Success){
-                    JoinedGame.JobId = JoinMatch.Groups[1].Value;
-                    JoinedGame.PlaceId = JoinMatch.Groups[2].Value;
-                    JoinedGame.ServerIP = JoinMatch.Groups[3].Value;
-                    JoinedGame.isConnected = true;
-                    JoinedGame.isDisconnected = false;
-                    joined?.Invoke(line,EventArgs.Empty);
-                }
-            }
         }
     }
-    public static class JoinedGame{
-        public static bool isDisconnected = false;
-        public static bool isConnected =false;
-        public static string JobId ="";
-        public static string PlaceId = "";
-        public static string ServerIP ="";
-    }
-}
-
-public class JoinedGameData{
-    public static bool isConnected{
-        get=>LogReader.JoinedGame.isConnected;
-    }
-    public static string JobId{
-        get=>LogReader.JoinedGame.JobId;
-    }
-    public static string PlaceId{
-        get=>LogReader.JoinedGame.PlaceId;
-    }
-    public static string ServerIP{
-        get=>LogReader.JoinedGame.ServerIP;
-    }
+    
 }

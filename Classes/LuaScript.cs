@@ -94,7 +94,7 @@ class LuaScript
     private ManualResetEventSlim _runningEvent = new(false);
     public ManualResetEventSlim _eventPausedUnlock = new(false);
     public ManualResetEventSlim _newCoroutineStarted = new(false);
-    private Coroutine? RunningCoroutine;
+    public Coroutine? RunningCoroutine;
     private Dictionary<Coroutine, DateTime> _sleepingCoroutines = new();
     public Dictionary<Coroutine, DynValue[]> CoroutinesArgs = new();
     private HashSet<Coroutine> _PausedCoroutines = new();
@@ -239,6 +239,14 @@ class LuaScript
             };
         } 
         public DynValue[]? _lastArgs = null;
+        [MoonSharpHidden]
+        public void trigger(object[]? args)
+        {
+            if (args==null){trigger();return;}
+            List<DynValue> objects = [];
+            foreach (var obj in args)objects.Add(DynValue.FromObject(script.luaScript,obj));
+            trigger(objects.ToArray());
+        }
         [MoonSharpHidden]
         public void trigger(DynValue[]? args =null){
             theEvent?.Invoke(this,EventArgs.Empty);

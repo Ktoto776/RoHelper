@@ -16,6 +16,10 @@ class LuaPermissions{
         }
         return false;
     }
+    
+    public bool isUserPermissionGranted(string permission){
+        return GrantedUserPermissions.Contains(permission);
+    }
     public bool isPermissionGranted(string permission){
         return GrantedPermissions.Contains(permission);
     } [MoonSharpHidden]

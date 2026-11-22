@@ -16,21 +16,29 @@ trayButton.Clicked:Connect(function()
 end)
 
 -- Roblox.logReader.NewLogLineEvent:Connect(function(log)
+--     -- if log.Data~="leaveUGCGameInternal"and not string.find(log.Data,"NoReload") then return end
 --     print(("("..log.logLevel..")"..log.logType.." ").."["..log.Sender.."]",log.Data)
 -- end)
 
+Roblox.logReader.Joining:Connect(function()
+    print("Joining")
+end)
+
 local joined = Roblox.joinedGameData
-Roblox.logReader.JoinedToPlace:Connect(function()
+Roblox.logReader.Joined:Connect(function()
     print("PlaceId:",joined.PlaceId)
     print("JobId:",joined.JobId)
     print("ServerIP:",joined.ServerIP)
 end)
 
-Roblox.logReader.SuccessLeftEvent:Connect(function()
-    print("Why you leave from this server?")
-end)
+-- Roblox.logReader.SuccessLeftEvent:Connect(function()
+--     print("Why you leave from this server?")
+--     task.wait(5)
+--     print("Go back!")
+--     -- Roblox:joinToServer(joined.PlaceId)
+-- end)
 
-Roblox.logReader.LeftEvent:Connect(function()
+Roblox.logReader.Leaving:Connect(function()
     print("Bye-bye")
 end)
 

@@ -18,6 +18,15 @@
                 "en":"Class for reading logs",
                 "ru":"Класс для чтения логов"
             }
+        },"UserId":{
+            "memberType":"Property",
+            "valueType":"string",
+            "Permissions":["roblox.userId"],
+            "isReadOnly":true,
+            "Description":{
+                "en":"UserId(if not set =''), if there is no permission, it will be =nil",
+                "ru":"UserId пользователя(если не был установлен =''), nil если нету разрешения"
+            }
         }
     }
 }

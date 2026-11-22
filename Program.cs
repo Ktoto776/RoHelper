@@ -32,6 +32,8 @@ static class Program
         UserData.RegisterType<LuaLogReader>();
         UserData.RegisterType<LuaProgramSync>();
         UserData.RegisterType<JoinedGameData>();
+        UserData.RegisterType<LuaPromiseReturn>();
+        LuaProgramSync._initClass();
         LogReader.StartReader();
         loadEmbeddedAddons();
         runLoadedAddons();

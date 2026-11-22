@@ -1,5 +1,6 @@
 ﻿{
     "ExitApp":"Exit",
     "OpenWindow":"Open",
-    "Settings":"Settings"
+    "Settings":"Settings",
+    "PermissionRequestFrom":"Permission request from"
 }

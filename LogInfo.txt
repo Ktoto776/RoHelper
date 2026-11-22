@@ -36,3 +36,25 @@ _JoinNotify_: (6)Info [DFLog::NetworkClient]   Connection accepted from 128.116.
     2026-11-17T16:19:35.676Z,2320.676758,2930,6,Info [FLog::CreatorOutput] Disconnect from 128.116.5.33|59927
 --Дисконект как выше, когда вылетел
 
+    2026-11-17T20:10:49.340Z,0.340164,16f8,6,Info [FLog::UpdateController] WindowsUpdateController: updaterFullPath: D:\ProgramFiles\Bloxstrap\Versions\version-2c6fd5e09aaf4cfa\RobloxPlayerInstaller.exe
+-- при заходе с путём к .exe роблокс updater
+-- или же:
+    2026-11-17T20:10:49.346Z,0.346125,0504,6,Info [FLog::UpdateController] Checking if updater exists at D:\ProgramFiles\Bloxstrap\Versions\version-2c6fd5e09aaf4cfa\RobloxPlayerInstaller.exe. Returning false
+
+
+    (6)Warning [FLog::Output]   NoReload Detector: Deeplinking NoReload!
+-- Запускается deeplink
+    (6)Warning [FLog::Output]   App NoReload Handler: remote warm start adjustment: *
+
+
+
+
+_JoinNotify_: (6)Warning [FLog::Output]   App NoReload Handler: remote warm start adjustment: 907
+_JoinNotify_: (6)Warning [FLog::Output]   App NoReload receiving deeplink
+_JoinNotify_: (6) [FLog::SingleSurfaceApp]   leaveUGCGameInternal
+
+-- Строка с userId
+2026-11-21T21:58:25.111Z,6070.111816,33c0,6 [FLog::GameJoinLoadTime] Report game_join_loadtime: placeid:205224386, join_time:0, universeid:93740418, referral_page:, sid:ab56ab24-b008-460c-965b-297891717520, clienttime:1795298303.868999958, userid:1707687987, 
+
+-- Строка при входе? с userId[1707687987]
+2026-11-21T20:17:49.692Z,34.692902,1220,6 [FLog::LogWin32BTId] LogWin32BTId, App, cookie Engine => Native set RBXEventTrackerV2 as CreateDate=09/23/2026 13:38:01&rbxuid=1707687987&browserid=1776862778423002

@@ -26,6 +26,31 @@
                 "en":"Checks whether a permit has been issued, as indicated in info.json",
                 "ru":"Узнаёт выдано ли разрешение в info.json"
             }
+        },"isUserPermissionGranted":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[
+                {
+                    "name":"userPermissionName",
+                    "type":"string",
+                    "description":{
+                        "en":"USer permission name",
+                        "ru":"Название разрешения пользователя"
+                    }
+                }
+            ], "Returns":[
+                {
+                    "name":"isGranted",
+                    "type":"boolean",
+                    "description":{
+                        "en":"Is user granted this permission?",
+                        "ru":"Выдано ли разрешение пользователем"
+                    }
+                }
+            ], "Description":{
+                "en":"Determines whether a permission has been granted by the user",
+                "ru":"Узнаёт выдано ли разрешение пользователем"
+            }
         }
     }
 }

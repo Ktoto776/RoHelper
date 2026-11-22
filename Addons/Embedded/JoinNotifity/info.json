@@ -8,7 +8,8 @@
         "create.tray_button",
         "create.window",
         "os.time",
-        "read_logs.all"
+        "read_logs.all",
+        "roblox.join_game"
     ],
     "versionBuild":1,
     "Settings":{

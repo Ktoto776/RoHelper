@@ -28,13 +28,22 @@
                 "ru":"JobId последнего подключённого сервер, если подключения не выполнялись =''"
             }
         },
-        "ServerIP":{
+        "RobloxServerIP":{
             "memberType":"Property",
             "valueType":"string",
             "isReadOnly":true,
             "Description":{
                 "en":"IP of the most recently connected server; if no connections have been made, it is ''",
                 "ru":"IP последнего подключённого сервер, если подключения не выполнялись =''"
+            }
+        },
+        "ServerAddress":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Address(IP:Port) of the most recently connected server; if no connections have been made, it is ''",
+                "ru":"Адрес(IP:Порт) последнего подключённого сервер, если подключения не выполнялись =''"
             }
         }
     }
