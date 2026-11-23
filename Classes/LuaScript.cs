@@ -97,7 +97,9 @@ class LuaScript
     public Coroutine? RunningCoroutine;
     private Dictionary<Coroutine, DateTime> _sleepingCoroutines = new();
     public Dictionary<Coroutine, DynValue[]> CoroutinesArgs = new();
+    public HashSet<Coroutine> coroutineDeclineArgs = new();
     private HashSet<Coroutine> _PausedCoroutines = new();
+    public HashSet<Coroutine> PausedCoroutines{get=>_PausedCoroutines}
     private CoreModules defaultModules = CoreModules.Preset_HardSandbox | CoreModules.Metatables |
             CoreModules.ErrorHandling | CoreModules.Coroutine | CoreModules.Json | CoreModules.OS_Time;
     public LuaConsole console;
@@ -130,9 +132,11 @@ class LuaScript
                             RunningCoroutine = coroutine;
                             try{
                                 DynValue[]? args = null;
-                                lock(_lock) if (CoroutinesArgs.TryGetValue(coroutine,out var arg))
-                                    args = arg;
-                                DynValue result; 
+                                lock(_lock) if (!coroutineDeclineArgs.Contains(coroutine)){
+                                    if (CoroutinesArgs.TryGetValue(coroutine,out var arg))
+                                        args = arg;
+                                    coroutineDeclineArgs.Add(coroutine);
+                                } DynValue result; 
                                 if (args!=null){
                                     result = coroutine.Resume(args);
                                     lock(_lock)CoroutinesArgs.Remove(coroutine);
@@ -141,7 +145,7 @@ class LuaScript
                                 if (result.Type != DataType.YieldRequest){
                                     if (result.Type!=DataType.UserData||result.ToObject()!=scriptMethods){
                                         lock(_lock) Coroutines.Remove(coroutine);
-                                    }
+                                    }else coroutineDeclineArgs.Remove(coroutine);
                                 }
                             }catch(ScriptRuntimeException exc){
                                 lock(_lock) Coroutines.Remove(coroutine);
@@ -308,6 +312,7 @@ class LuaScript
         [typeof(LuaLogReader)]="LogReader",
         [typeof(JoinedGameData)]="JoinedGameData",
         [typeof(LogLine)]="LogLine",
+        [typeof(LuaPromiseReturn)]="PromiseReturn",
     }; public static string GetLuaClassName(Type t){
         if (typesNameInLua.TryGetValue(t,out var typeName)) return typeName;
         return "unknown";

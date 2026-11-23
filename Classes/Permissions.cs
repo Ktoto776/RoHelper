@@ -16,7 +16,17 @@ class LuaPermissions{
         }
         return false;
     }
-    
+    public Dictionary<string,LuaPromiseReturn> activePromptReturns = new();
+    public HashSet<UserPermissionPrompt> activrPromots = new();
+    public object PermissionRequest(){
+        if (!RequiredUserPermissions.Contains())
+            return DynValue.False;
+        if (GrantedUserPermissions.Contains())
+            return DynValue.True;
+        LuaPromiseReturn ret = new();
+        
+        return ret;
+    }
     public bool isUserPermissionGranted(string permission){
         return GrantedUserPermissions.Contains(permission);
     }

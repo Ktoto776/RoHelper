@@ -1,4 +1,4 @@
-﻿local rawsetmetatable,rawgetmetatable,os,debug = setmetatable,getmetatable,os,debug
+local rawsetmetatable,rawgetmetatable,os,debug = setmetatable,getmetatable,os,debug
 local changeEnvironment = _changeEnvironment
 local newENV = {}
 local oldENV = {
@@ -59,7 +59,18 @@ local classIndex = {
     }
 }
 local metatablesBlocked = {}
-local function parseCSharpClass(class,self)
+local parseCSharpClass
+local function parseReturnInputs(...)
+    local tab = table.pack(...)
+    local res = {}
+    for _,v in ipairs(tab) do
+        if oldENV.getClassTypeName(v)=="PromiseReturn" then
+            table.insert(res,v.Connect() or 
+                coroutine.yield(scriptClass))
+        else table.insert(res,parseCSharpClass(v))
+        end
+    end return table.unpack(res)
+end function parseCSharpClass(class,self)
     if parsedClassesCS[class] then return parsedClassesCS[class] end
     if parsedToCS[class] then return class end
     local typ = oldENV.type(class)
@@ -119,11 +130,10 @@ local function parseCSharpClass(class,self)
     elseif typ=="function" then
         local parsed = parsedClassesCS[self]
         return function(mbSelf,...)
-            local tab if mbSelf==self or mbSelf==parsed then
-                tab = table.pack(class(...))
-            else tab = table.pack(class(mbSelf,...))
-            end for k,v in ipairs(tab) do tab[k] = parseCSharpClass(v) end
-            return table.unpack(tab)
+            if mbSelf==self or mbSelf==parsed then
+                return parseReturnInputs(class(...))
+            else return parseReturnInputs(class(mbSelf,...))
+            end
         end
     else return class
     end
