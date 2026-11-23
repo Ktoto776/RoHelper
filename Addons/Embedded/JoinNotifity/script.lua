@@ -12,8 +12,16 @@ print(1,tostring(os),1)
 
 trayButton.Clicked:Connect(function()
     print("Tray button click")
-    window:Show()
+    -- window:Show()
+    print(tostring(script.permissions.PermissionRequest("roblox.join_game")))
 end)
+
+task.exit()
+
+while true do
+    -- task.wait(1)
+    print("LOL")
+end
 
 -- Roblox.logReader.NewLogLineEvent:Connect(function(log)
 --     -- if log.Data~="leaveUGCGameInternal"and not string.find(log.Data,"NoReload") then return end

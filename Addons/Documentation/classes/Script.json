@@ -44,6 +44,14 @@
                 "en":"Script permissions",
                 "ru":"Разрешения скрипта"
             }
+        },"DisplayName":{
+            "memberType":"Property",
+            "isReadOnly":true,
+            "valueType":"string",
+            "Description":{
+                "en":"Script display name",
+                "ru":"Отображаемое имя скрипта"
+            }
         },"getTrayMenuButton":{
             "memberType":"Method",
             "isWithSelf":true,

@@ -73,7 +73,6 @@ public static class LogAnalizator{
         public static Regex UserIdWhenJoinRegex = new(@"userid:(\d+)");
         public static Regex UserIdAltCookieRegex = new(@"rbxuid:(\d+)");
     }
-    private static bool isJoinDataCollecting = false;
     public static AnalizeResult analizeLogLine(LogLine line){
         // Roblox Path (from updater path)
         if (line.Sender=="FLog::UpdateController"){

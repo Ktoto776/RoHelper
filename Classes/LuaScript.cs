@@ -99,7 +99,7 @@ class LuaScript
     public Dictionary<Coroutine, DynValue[]> CoroutinesArgs = new();
     public HashSet<Coroutine> coroutineDeclineArgs = new();
     private HashSet<Coroutine> _PausedCoroutines = new();
-    public HashSet<Coroutine> PausedCoroutines{get=>_PausedCoroutines}
+    public HashSet<Coroutine> PausedCoroutines{get=>_PausedCoroutines;}
     private CoreModules defaultModules = CoreModules.Preset_HardSandbox | CoreModules.Metatables |
             CoreModules.ErrorHandling | CoreModules.Coroutine | CoreModules.Json | CoreModules.OS_Time;
     public LuaConsole console;

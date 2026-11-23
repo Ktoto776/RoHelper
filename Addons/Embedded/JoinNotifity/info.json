@@ -8,7 +8,9 @@
         "create.tray_button",
         "create.window",
         "os.time",
-        "read_logs.all",
+        "read_logs.all"
+    ],
+    "UserPermissions":[
         "roblox.join_game"
     ],
     "versionBuild":1,

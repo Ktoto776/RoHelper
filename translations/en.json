@@ -2,5 +2,6 @@
     "ExitApp":"Exit",
     "OpenWindow":"Open",
     "Settings":"Settings",
-    "PermissionRequestFrom":"Permission request from"
+    "PermissionRequestFrom":"Permission request from",
+    "YouWantToGrantPermission":"You want to grant the script '<name>' permission to:"
 }

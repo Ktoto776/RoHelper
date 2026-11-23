@@ -11,6 +11,12 @@ class ScriptMethods{
     public LuaTrayMenu? luaTrayMenu;
     private HashSet<ScriptWindow> scriptWindows =new();
     private Addon? addon;
+    public string DisplayName{
+        get{
+            if (addon!=null) return addon.addonDisplayName;
+            else return script.scriptName;
+        }
+    }
     private void bindLTMToAddonName(){
         if (luaTrayMenu!=null){
             if (addon!=null)

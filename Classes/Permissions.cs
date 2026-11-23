@@ -1,8 +1,14 @@
-﻿using MoonSharp.Interpreter;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using MoonSharp.Interpreter;
 
 namespace RoHelper;
 
 class LuaPermissions{
+    // [MoonSharpHidden]
+    private LuaScript luaScript;
+    public LuaPermissions(LuaScript luaScript){
+        this.luaScript = luaScript;
+    }
     [MoonSharpHidden]
     public HashSet<string> GrantedPermissions =new();
     [MoonSharpHidden]
@@ -17,14 +23,29 @@ class LuaPermissions{
         return false;
     }
     public Dictionary<string,LuaPromiseReturn> activePromptReturns = new();
-    public HashSet<UserPermissionPrompt> activrPromots = new();
-    public object PermissionRequest(){
-        if (!RequiredUserPermissions.Contains())
+    public HashSet<UserPermissionPrompt> activePromots = new();
+    public object PermissionRequest(string userPermission){
+        if (!RequiredUserPermissions.Contains(userPermission))
             return DynValue.False;
-        if (GrantedUserPermissions.Contains())
+        if (GrantedUserPermissions.Contains(userPermission))
             return DynValue.True;
+        if (activePromptReturns.TryGetValue(userPermission,out var promiseReturn))
+            return promiseReturn;
         LuaPromiseReturn ret = new();
-        
+        activePromptReturns[userPermission] = ret;
+        UserPermissionPrompt prompt = new(luaScript);
+        activePromots.Add(prompt);
+        prompt.Form.FormClosed += (_,_)=>{
+            activePromots.Remove(prompt);
+            activePromptReturns.Remove(userPermission);
+        };
+        prompt.Form.Accept +=(_,_)=>{
+            GrantedUserPermissions.Add(userPermission);
+            ret.Return([DynValue.True]);
+        };
+        prompt.Form.Decline +=(_,_)=>{
+            ret.Return([DynValue.False]);
+        };
         return ret;
     }
     public bool isUserPermissionGranted(string permission){

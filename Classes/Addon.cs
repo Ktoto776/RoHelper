@@ -59,6 +59,7 @@ class Addon{
         settingsChanged.trigger([DynValue.NewString(groupName),DynValue.NewString(settingName),value]);
     }
     public Addon(){
+        permissions = new(luaScript);
         SettingsButton = Program.mainWindow.createLeftItemButton();
         Program.mainWindow.leftAddonPanel.Controls.Add(SettingsButton);
         settingsPanel = Program.mainWindow.createSettingsPanel();
@@ -75,7 +76,7 @@ class Addon{
     }
     public Dictionary<string,SettingsPageGroup> settingsGroups = new();
     public Dictionary<string,Dictionary<string,LuaSetting>> luaSettings = new();
-    public LuaPermissions permissions = new();
+    public LuaPermissions permissions;
     public void loadInfo(AddonJsonInfo info,bool isEmbedded =false){
         this.isEmbedded = isEmbedded;
         var Name = info.Name;
