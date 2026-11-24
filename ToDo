@@ -34,11 +34,14 @@
 
 4. Быстрые задачи
     1) Сделать документацию для RequestPermission
-    2) Доделать окно RequestPermission
-    3) Протестить и сделать эвенты для LogStack
-    4) ScriptColor в OtherClass.cs
-    5) Доделать ScriptWindow
-    6) Додокументировать ScriptWindow
+    1.5) Сделать документацию LogReader
+    2) Сделать JoinToServer
+    3) Сделать скрипт кнопки Rejoin в трее как Тест
+    4) Сделать test release с кнопкой перезахода
+    5) Протестить и сделать эвенты для LogStack
+    6) ScriptColor в OtherClass.cs
+    7) Доделать ScriptWindow
+    8) Додокументировать ScriptWindow
 
 
 Заметки реализованных разрешений:

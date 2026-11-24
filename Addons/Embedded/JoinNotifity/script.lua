@@ -16,10 +16,8 @@ trayButton.Clicked:Connect(function()
     print(tostring(script.permissions.PermissionRequest("roblox.join_game")))
 end)
 
-task.exit()
-
 while true do
-    -- task.wait(1)
+    task.wait(1)
     print("LOL")
 end
 

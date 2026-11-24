@@ -21,9 +21,9 @@ class ScriptMethods{
         if (luaTrayMenu!=null){
             if (addon!=null)
                 Program.translator.bindToTranslator(()=>{
-                    luaTrayMenu.stripItem.Text = addon.addonDisplayName;
+                    Program.mainWindow.Invoke(()=>luaTrayMenu.stripItem.Text = addon.addonDisplayName);
                 });
-            else luaTrayMenu.stripItem.Text = script.scriptName;
+            else Program.mainWindow.Invoke(()=>luaTrayMenu.stripItem.Text = script.scriptName);
         }
     }
     [MoonSharpHidden]
@@ -61,16 +61,18 @@ class ScriptMethods{
         public LuaScript.LuaEvent Clicked;
         public void Destroy(){
             methods.luaTrayMenu = null;
-            Program.mainTray.trayMenu.Items.Remove(stripItem);
+            Program.mainWindow.Invoke(()=>Program.mainTray.trayMenu.Items.Remove(stripItem));
         }
         public LuaTrayMenu(ScriptMethods methods){
             this.methods = methods;
             Clicked = new(methods.script);
-            stripItem.Text = "_";
-            Program.mainTray.trayMenu.Items.Insert(0,stripItem);
-            stripItem.Click += (_,_)=>{
-                Clicked.trigger();
-            };
+            Program.mainWindow.Invoke(()=>{
+                stripItem.Text = "_";
+                Program.mainTray.trayMenu.Items.Insert(0,stripItem);
+                stripItem.Click += (_,_)=>{
+                    Clicked.trigger();
+                };
+            });
         }
     }
 }

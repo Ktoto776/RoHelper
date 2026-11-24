@@ -3,5 +3,10 @@
     "OpenWindow":"Открыть",
     "Settings":"Настройки",
     "PermissionRequestFrom":"Запрос разрешения от",
-    "YouWantToGrantPermission":"Ты хочешь дать разрешение скрипту '<name>' на:"
+    "YouWantToGrantPermission":"Ты хочешь дать разрешение скрипту \n'<name>' на:",
+    "declinePermission":"Запретить",
+    "allowOncePermission":"Да, на 1 раз",
+    "allowPermission":"Разрешить",
+    "userPermissionName.roblox.join_game":"Подключение к игре",
+    "userPermissionDescription.roblox.join_game":"Это позволяет скрипту подключить роблокс к игре или даже к определённому серверу"
 }

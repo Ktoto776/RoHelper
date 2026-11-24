@@ -3,5 +3,10 @@
     "OpenWindow":"Open",
     "Settings":"Settings",
     "PermissionRequestFrom":"Permission request from",
-    "YouWantToGrantPermission":"You want to grant the script '<name>' permission to:"
+    "YouWantToGrantPermission":"You want to grant the script \n'<name>' permission to:",
+    "declinePermission":"Deny",
+    "allowOncePermission":"Allow once",
+    "allowPermission":"Allow",
+    "userPermissionName.roblox.join_game":"Join to game",
+    "userPermissionDescription.roblox.join_game":"This allows the script to connect Roblox to a game, or even to a specific server."
 }
