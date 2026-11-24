@@ -17,6 +17,12 @@ class UserPermissionPromptForm : Form
     };
     private Label ScriptRequresLabel =new(){
         Text="YouWantToGrantPermission",
+        AutoSize=true,
+        TextAlign=ContentAlignment.MiddleCenter
+    };
+    private Label DescriptionLabel =new(){
+        Text="userPemissionDescription",
+        AutoSize=true,
         TextAlign=ContentAlignment.MiddleCenter
     };
     private TableLayoutPanel buttonsTableLayout = new(){
@@ -40,10 +46,22 @@ class UserPermissionPromptForm : Form
         mainTableLayout.RowStyles.Add(new(SizeType.AutoSize));
         mainTableLayout.Controls.Add(ScriptRequresLabel,0,0);
         ScriptRequresLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        mainTableLayout.ClientSizeChanged += (_,_)=>{
+            ScriptRequresLabel.MaximumSize = new(mainTableLayout.ClientSize.Width,0);
+        };
         Program.translator.bindToTranslateChanged(ScriptRequresLabel.Text,(txt)=>{
             ScriptRequresLabel.Text = txt.Replace("<name>",methods.DisplayName);
         });
+            //DescriptionLabel
         mainTableLayout.RowStyles.Add(new(SizeType.AutoSize));
+        mainTableLayout.Controls.Add(DescriptionLabel,0,1);
+        DescriptionLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        mainTableLayout.ClientSizeChanged += (_,_)=>{
+            DescriptionLabel.MaximumSize = new(mainTableLayout.ClientSize.Width,0);
+        };
+        Program.translator.bindToTranslateChanged(DescriptionLabel.Text,(txt)=>{
+            DescriptionLabel.Text = txt.Replace("<name>",methods.DisplayName);
+        });
         mainTableLayout.RowStyles.Add(new(SizeType.AutoSize));
         mainTableLayout.RowStyles.Add(new(SizeType.Percent,1f));
         // mainTableLayout.ColumnStyles[mainTableLayout.ColumnCount-1] = ;
