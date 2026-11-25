@@ -29,6 +29,29 @@ class LuaProgramSync{
             else return LogAnalizator.Data.userId;
         }
     }
+    public DynValue joinToServer(Table serverData){
+        if (scriptMethods.permissions==null||
+            !scriptMethods.permissions.isUserPermissionGranted("roblox.join_game"))
+            return DynValue.FromObject(scriptMethods.script.luaScript,new CSharpLuaError("Permission is not granted"));
+        if (!LogAnalizator.Flags.isRobloxPathInited) return DynValue.False;
+        if (serverData.Get("PlaceId").Type==DataType.Nil)
+            return DynValue.FromObject(scriptMethods.script.luaScript,
+            new CSharpLuaError("PlaceId is nil"));
+        if (serverData.Get("PlaceId").Type!=DataType.String)
+            return DynValue.FromObject(scriptMethods.script.luaScript,
+            new CSharpLuaError("PlaceId is incorrect (expected string)"));
+        var deeplink = $"roblox://experiences/start?placeId={serverData.Get("PlaceId").String}";
+        if (serverData.Get("JobId").Type==DataType.String)
+            deeplink += $"&gameInstanceId={serverData.Get("JobId").String}";
+        if (serverData.Get("accessCode").Type==DataType.String)
+            deeplink += $"&accessCode={serverData.Get("accessCode").String}";
+        if (serverData.Get("linkCode").Type==DataType.String)
+            deeplink += $"&linkCode={serverData.Get("linkCode").String}";
+        if (serverData.Get("reservedServerAccessCode").Type==DataType.String)
+            deeplink += $"&reservedServerAccessCode={serverData.Get("reservedServerAccessCode").String}";
+        Process.Start(LogAnalizator.Data.robloxClientPath, deeplink);
+        return DynValue.True;
+    }
     public DynValue joinToServer(string placeId,string? JobID){
         if (scriptMethods.permissions==null||
             !scriptMethods.permissions.isUserPermissionGranted("roblox.join_game"))

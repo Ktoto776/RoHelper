@@ -36,7 +36,7 @@ static class Program
         LuaProgramSync._initClass();
         LogReader.StartReader();
         loadEmbeddedAddons();
-        runLoadedAddons();
+        mainWindow.HandleCreated += (_,_)=>runLoadedAddons();
         Application.Run(mainWindow);
         appData.saveWindows();
     }

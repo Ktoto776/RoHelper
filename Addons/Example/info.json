@@ -13,7 +13,8 @@
         "read_logs.all",
         "read_logs.join_event",
         "roblox.joined_server",
-        "read_logs.left_event"
+        "read_logs.left_event",
+        "read_logs.teleport_events"
     ],
     "UserPermissions":[
         "keyboard.fullRead",

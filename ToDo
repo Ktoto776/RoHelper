@@ -33,15 +33,13 @@
     3) Консоль в приложении
 
 4. Быстрые задачи
-    1) Сделать документацию для RequestPermission
-    1.5) Сделать документацию LogReader
-    2) Сделать JoinToServer
-    3) Сделать скрипт кнопки Rejoin в трее как Тест
-    4) Сделать test release с кнопкой перезахода
-    5) Протестить и сделать эвенты для LogStack
-    6) ScriptColor в OtherClass.cs
-    7) Доделать ScriptWindow
-    8) Додокументировать ScriptWindow
+    1) Сделать эвенты приватного сервера
+    2) Подключить Https запросы
+    3) Сделать test release
+    4) Протестить и сделать эвенты для LogStack
+    5) ScriptColor в OtherClass.cs
+    6) Доделать ScriptWindow
+    7) Додокументировать ScriptWindow
 
 
 Заметки реализованных разрешений:

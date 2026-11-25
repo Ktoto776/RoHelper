@@ -73,6 +73,22 @@
                     }
                 }
             ]
+        },
+        "Telepoting":{
+            "memberType":"Event",
+            "Permissions":["read_logs.teleport_events"],
+            "Description":{
+                "en":"Fires when game teleporting player to other place",
+                "ru":"Запускается когда плейс телепортирует игрока на другой плейс"
+            }, "Args":[]
+        },
+        "Teleported":{
+            "memberType":"Event",
+            "Permissions":["read_logs.teleport_events"],
+            "Description":{
+                "en":"Fires when game teleported player to other place",
+                "ru":"Запускается когда плейс телепортировал игрока на другой плейс"
+            }, "Args":[]
         }
     }
 }

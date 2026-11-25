@@ -27,6 +27,43 @@
                 "en":"UserId(if not set =''), if there is no permission, it will be =nil",
                 "ru":"UserId пользователя(если не был установлен =''), nil если нету разрешения"
             }
+        },"joinToServer":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Permissions":["roblox.join_game"],
+            "Overload":[
+                {
+                    "dType":"fun(self:Roblox,placeId:string,jobId:string)",
+                    "args":[
+                        {
+                            "name":"placeId",
+                            "type":"string"
+                        },{
+                            "name":"jobId",
+                            "type":"string",
+                            "description":{
+                                "en":"JobId (ServerInstanceId)",
+                                "ru":"JobId (ServerInstanceId)"
+                            }
+                        }
+                    ],"returns":[]
+                }
+            ],
+            "Args":[
+                {
+                    "name":"joinData",
+                    "type":"JoinServerData",
+                    "description":{
+                        "en":"Server join details",
+                        "ru":"Данные для присоедининения к серверу"
+                    }
+                }
+            ],
+            "Returns":[],
+            "Description":{
+                "en":"Enters the game via a deeplink",
+                "ru":"Заходит в игру через deeplink"
+            }
         }
     }
 }

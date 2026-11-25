@@ -58,3 +58,13 @@ _JoinNotify_: (6) [FLog::SingleSurfaceApp]   leaveUGCGameInternal
 
 -- Строка при входе? с userId[1707687987]
 2026-11-21T20:17:49.692Z,34.692902,1220,6 [FLog::LogWin32BTId] LogWin32BTId, App, cookie Engine => Native set RBXEventTrackerV2 as CreateDate=09/23/2026 13:38:01&rbxuid=1707687987&browserid=1776862778423002
+
+
+-- При телепорте в другой плейс
+_JoinNotify_: (6)Info [FLog::UgcExperienceController]   UgcExperienceController: doTeleport: joinScriptUrl https://assetgame.roblox.com/Game/Join.ashx?ticketVersion=2&ticket={"UserId"%3a1707687987%2c"UserName"%3a"SharickShoooLikee"%2c"DisplayName"%3a"Ktoto776"%2c"CharacterFetchUrl"%3a"https%3a%2f%2fapi.roblox.com%2fv1.1%2favatar-fetch%2f%3fplaceId%3d5867227007%26userId%3d1707687987"%2c"GameId"%3a"2c9400dd-dd2d-477a-8d11-cd30080b331d"%2c"PlaceId"%3a5867227007%2c"UniverseId"%3a2082205150%2c"ServerId"%3a1296955%2c"ServerPort"%3a52164%2c"IsTeleport"%3atrue%2c"FollowUserId"%3anull%2c"TimeStamp"%3a"11%2f25%2f2026+12%3a54%3a41"%2c"CharacterAppearanceId"%3a1707687987%2c"AlternateName"%3anull%2c"JoinTypeId"%3a6%2c"MatchmakingDecisionId"%3anull%2c"GameJoinMetadata"%3a{"JoinSource"%3a1%2c"RequestType"%3a2%2c"MatchmakingDecisionId"%3a"00000000-0000-0000-0000-000000000000"%2c"IsPlaceVoiceChatEnabled"%3afalse%2c"ExperienceContentMaturityReviewStatus"%3anull}%2c"SourcePlaceId"%3a5846386835%2c"Sour
+
+-- После успешного телепорта в другой плейс
+_JoinNotify_: (6) [FLog::SessionTransitionFSM]   Teleported.
+
+-- При заходе на приватку со вкладки servers
+2026-11-25T13:53:06.714Z,7151.714844,1f28,6,Warning [FLog::NewWebView2Browser] Webview handles hybrid javascript event {"moduleID":"Game","functionName":"launchGame","params":{"request":{"requestType":"RequestPrivateGame","placeId":"7041939546","accessCode":"272e51b0-436c-4986-8391-7ecaa087f7f2","browserTrackerId":"1776862778423002","joinAttemptId":"a426e36c-4693-4db9-a8b5-41f687f68256","joinAttemptOrigin":"privateServerListJoin"}},"callbackID":"e9e4fa22-b3ed-c62c-5424-c6585283d2a3"}

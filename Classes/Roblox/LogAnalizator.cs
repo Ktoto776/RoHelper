@@ -37,7 +37,9 @@ public static class LogAnalizator{
         DeeplinkJoin=6,
         Leaving=7,
         Disconnected=8,
-        NewJoiningServerData=9
+        NewJoiningServerData=9,
+        doingTeleport=10,
+        Teleported=11,
     }
     public static class Flags{
         public static bool isRobloxPathInited = false;
@@ -50,6 +52,7 @@ public static class LogAnalizator{
         public static string userId = "";
         public static class JoinedGame{
             public static bool isConnected =false;
+            public static bool isTeleported = false;
             public static string JobId ="";
             public static string PlaceId = "";
             public static string RobloxServerIP ="";
@@ -73,6 +76,7 @@ public static class LogAnalizator{
         public static Regex UserIdWhenJoinRegex = new(@"userid:(\d+)");
         public static Regex UserIdAltCookieRegex = new(@"rbxuid:(\d+)");
     }
+    private static double? lastTeleportedEvent;
     public static AnalizeResult analizeLogLine(LogLine line){
         // Roblox Path (from updater path)
         if (line.Sender=="FLog::UpdateController"){
@@ -101,6 +105,8 @@ public static class LogAnalizator{
                 Data.JoinedGame.PlaceId = JoinMatch.Groups[2].Value;
                 Data.JoinedGame.RobloxServerIP = JoinMatch.Groups[3].Value;
                 Data.JoinedGame.isConnected = true;
+                Data.JoinedGame.isTeleported = lastTeleportedEvent!=null&&
+                    line.timeTag-lastTeleportedEvent<1;
                 return new AnalizeResult(AnalizeResultTypes.NewJoiningServerData);
             }
         }else if(line.Sender=="DFLog::NetworkClient"){ 
@@ -136,15 +142,17 @@ public static class LogAnalizator{
             Match match = AnalyzeData.UserIdAltCookieRegex.Match(line.Data);
             if (match.Success) Data.userId = match.Groups[1].Value.Trim();
         }
-        // if(line.Sender=="DFLog::NetworkClient"&&line.Data.Contains("Client:Disconnect")){
-        //     if (!JoinedGame.isConnected){
-        //         if(JoinedGame.isDisconnected){
-        //             user_left?.Invoke(line,EventArgs.Empty);
-        //             JoinedGame.isDisconnected = false;
-        //         } return;
-        //     } JoinedGame.isConnected = false;
-        //     user_success_left?.Invoke(line,EventArgs.Empty);
-        // }else 
+        // Teleporting
+        if (line.Sender=="FLog::SessionTransitionFSM"){
+            if (line.Data.Contains("Teleported.")){
+                lastTeleportedEvent = line.timeTag;
+                return new(AnalizeResultTypes.Teleported);
+            }
+        }else if(line.Sender=="FLog::UgcExperienceController"){
+            if (line.Data.Contains("UgcExperienceController: doTeleport: joinScriptUrl ")){
+                return new(AnalizeResultTypes.doingTeleport);
+            }
+        }
         return LogStackAnalizator.analyze(line) ??new AnalizeResult(AnalizeResultTypes.Nothing);
     }
 }
@@ -164,5 +172,8 @@ public class JoinedGameData{
     }
     public static string ServerAddress{
         get=>LogAnalizator.Data.JoinedGame.ServerAddress;
+    }
+    public static bool isTeleported{
+        get=>LogAnalizator.Data.JoinedGame.isTeleported;
     }
 }

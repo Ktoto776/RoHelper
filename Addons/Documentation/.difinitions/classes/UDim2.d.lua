@@ -1,4 +1,4 @@
 ---@class UDim2
----@field X UDim#
 ---@field Y UDim#
+---@field X UDim#
 local UDim2={}

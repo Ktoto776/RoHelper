@@ -60,18 +60,21 @@ local classIndex = {
 }
 local metatablesBlocked = {}
 local parseCSharpClass
-local function parseReturnInputs(...)
+local function parseReturnInputs(level,...)
     local tab = table.pack(...)
     local res = {}
     for _,v in ipairs(tab) do
-        if oldENV.getClassTypeName(v)=="PromiseReturn" then
+        local className = oldENV.getClassTypeName(v)
+        if className=="PromiseReturn" then
             local tab = v.Connect(scriptClass)
-            for _,vv in ipairs(parseReturnInputs(tab and table.unpack(tab)
+            for _,vv in ipairs(parseReturnInputs(level+1,tab and table.unpack(tab)
                 or
                 coroutine.yield(scriptClass)
             )) do
                 table.insert(res,vv)
             end
+        elseif className=="error" then
+            error(v.description,level+1)
         else table.insert(res,parseCSharpClass(v))
         end
     end return res
@@ -81,7 +84,7 @@ end function parseCSharpClass(class,self)
     local typ = oldENV.type(class)
     if typ=="userdata" then
         local className = oldENV.getClassTypeName(class)
-        if className=="error" then error(class.description,3) end
+        if className=="error" then error(class.description,2) end
         local propertiesType = oldENV.classGetMembersWriteTypes(class)
         local obj = rawsetmetatable({},{
             __index=function(_,name)
@@ -136,8 +139,8 @@ end function parseCSharpClass(class,self)
         local parsed = parsedClassesCS[self]
         return function(mbSelf,...)
             if mbSelf==self or mbSelf==parsed then
-                return table.unpack(parseReturnInputs(class(...)))
-            else return table.unpack(parseReturnInputs(class(mbSelf,...)))
+                return table.unpack(parseReturnInputs(2,class(...)))
+            else return table.unpack(parseReturnInputs(2,class(mbSelf,...)))
             end
         end
     else return class

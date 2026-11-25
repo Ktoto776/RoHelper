@@ -1,15 +1,29 @@
----@diagnostic disable: missing-return
 ---@diagnostic disable: inject-field
+---@diagnostic disable: missing-return
 
 ---@class Window
 ---@field isBorderFixed boolean#Зафиксирована ли граница окна
+---@field isVisible boolean#Видно ли окно
+---@field MaximazeBox boolean#Может ли пользователь увеличить окно на весь экран, игнорируется если установлен MaximumSize
 ---@field Size PixelsSize#Размер окна в пикселях
 ---@field ClientSize PixelsSize#Размер внутренней области окна
 ---@field MaximumSize PixelsSize#Максимальный размер окна в пикселях
----@field isVisible boolean#Видно ли окно
 ---@field MinimumSize PixelsSize#Минимальный размер окна в пикселях
----@field MaximazeBox boolean#Может ли пользователь увеличить окно на весь экран, игнорируется если установлен MaximumSize
 local Window={}
+
+--[[Запускается когда изменился минимальный размер окна]]
+---@diagnostic disable-next-line: undefined-doc-name
+---@type Event
+Window.MinimumSizeChanged = {}
+---Параллельно подключиться к событию
+---@param callback fun(MinimumSize: PixelsSize)
+function Window.MinimumSizeChanged:Connect(callback) end
+---Параллельно подключиться к событию, но на 1 запуск
+---@param callback fun(MinimumSize: PixelsSize)
+function Window.MinimumSizeChanged:Once(callback) end
+---Подождать пока запустится событие
+---@return PixelsSize MinimumSize
+function Window.MinimumSizeChanged:Wait() end
 
 --[[Запускается когда окно удалено]]
 ---@diagnostic disable-next-line: undefined-doc-name
@@ -27,6 +41,12 @@ function Window.Destroying:Wait() end
 
 --[[Скрывает окно]]
 function Window:Hide()end
+
+--[[Показывает окно]]
+function Window:Show()end
+
+--[[Удаляет окно]]
+function Window:Destroy()end
 
 --[[Запускается когда изменился размер окна]]
 ---@diagnostic disable-next-line: undefined-doc-name
@@ -56,23 +76,6 @@ function Window.VisibleChanged:Once(callback) end
 ---@return boolean isVisible #Видно ли окно
 function Window.VisibleChanged:Wait() end
 
---[[Показывает окно]]
-function Window:Show()end
-
---[[Запускается когда изменился минимальный размер окна]]
----@diagnostic disable-next-line: undefined-doc-name
----@type Event
-Window.MinimumSizeChanged = {}
----Параллельно подключиться к событию
----@param callback fun(MinimumSize: PixelsSize)
-function Window.MinimumSizeChanged:Connect(callback) end
----Параллельно подключиться к событию, но на 1 запуск
----@param callback fun(MinimumSize: PixelsSize)
-function Window.MinimumSizeChanged:Once(callback) end
----Подождать пока запустится событие
----@return PixelsSize MinimumSize
-function Window.MinimumSizeChanged:Wait() end
-
 --[[Запускается когда изменился максимальный размер окна]]
 ---@diagnostic disable-next-line: undefined-doc-name
 ---@type Event
@@ -86,9 +89,6 @@ function Window.MaximumSizeChanged:Once(callback) end
 ---Подождать пока запустится событие
 ---@return PixelsSize MaximumSize
 function Window.MaximumSizeChanged:Wait() end
-
---[[Удаляет окно]]
-function Window:Destroy()end
 
 --[[Запускается когда изменился размер внутренней области окна]]
 ---@diagnostic disable-next-line: undefined-doc-name

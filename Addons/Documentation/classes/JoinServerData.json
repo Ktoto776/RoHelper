@@ -1,0 +1,46 @@
+{
+    "ClassName":"JoinServerData",
+    "Members":{
+        "PlaceId":{
+            "memberType":"Property",
+            "valueType":"string",
+            "isReadOnly":false
+        },
+        "JobId":{
+            "memberType":"Property",
+            "valueType":"string?",
+            "isReadOnly":false,
+            "Description":{
+                "en":"JobId (also called ServerInstanceId)",
+                "ru":"JobId (также зовётся как ServerInstanceId)"
+            }
+        },
+        "accessCode":{
+            "memberType":"Property",
+            "valueType":"string?",
+            "isReadOnly":false,
+            "Description":{
+                "en":"accessCode for private servers",
+                "ru":"accessCode(код доступа) для приватных серверов"
+            }
+        },
+        "linkCode":{
+            "memberType":"Property",
+            "valueType":"string?",
+            "isReadOnly":false,
+            "Description":{
+                "en":"linkCode for private servers",
+                "ru":"linkCode(код доступа ссылки) для приватных серверов"
+            }
+        },
+        "reservedServerAccessCode":{
+            "memberType":"Property",
+            "valueType":"string?",
+            "isReadOnly":false,
+            "Description":{
+                "en":"accessCode for reserved server",
+                "ru":"Код зарезервированного сервера"
+            }
+        }
+    }
+}

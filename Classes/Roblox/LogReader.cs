@@ -5,12 +5,14 @@ using MoonSharp.Interpreter;
 namespace RoHelper;
 
 class LuaLogReader{
-    public LuaScript.LuaEvent? NewLogLineEvent;
     public LuaScript.LuaEvent? NewRawLineEvent;
-    public LuaScript.LuaEvent? Joining;
+    public LuaScript.LuaEvent? NewLogLineEvent;
     public LuaScript.LuaEvent? Joined;
+    public LuaScript.LuaEvent? Joining;
     public LuaScript.LuaEvent? Leaving;
     public LuaScript.LuaEvent? Disconnected;
+    public LuaScript.LuaEvent? Telepoting;
+    public LuaScript.LuaEvent? Teleported;
 }
 
 [MoonSharpUserData]
@@ -79,6 +81,7 @@ static class LogReader{
         LuaPermissions.registeredPermissions.Add("read_logs.join_event");
         LuaPermissions.registeredPermissions.Add("roblox.joined_server");
         LuaPermissions.registeredPermissions.Add("read_logs.left_event");
+        LuaPermissions.registeredPermissions.Add("read_logs.teleport_events");
         Console.WriteLine(LogsFolder);
         try{
             Directory.CreateDirectory(OldLogsFolder);
@@ -142,6 +145,8 @@ static class LogReader{
                 methods.permissions.GrantedPermissions.Add("read_logs.join_event");
             if (!methods.permissions.GrantedPermissions.Contains("read_logs.left_event"))
                 methods.permissions.GrantedPermissions.Add("read_logs.left_event");
+            if (!methods.permissions.GrantedPermissions.Contains("read_logs.teleport_events"))
+                methods.permissions.GrantedPermissions.Add("read_logs.teleport_events");
         }
         if (methods.permissions.isPermissionGranted("read_logs.join_event")){
             reader.Joining = new(methods.script);
@@ -153,6 +158,11 @@ static class LogReader{
             LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Leaving,(objs)=>reader.Leaving.trigger(objs));
             reader.Disconnected = new(methods.script);
             LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Disconnected,(objs)=>reader.Disconnected.trigger(objs));
+        } if (methods.permissions.isPermissionGranted("read_logs.teleport_events")){
+            reader.Telepoting = new(methods.script);
+            LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.doingTeleport,(objs)=>reader.Telepoting.trigger(objs));
+            reader.Teleported = new(methods.script);
+            LogAnalizator.BindLuaEvent(LogAnalizator.AnalizeResultTypes.Teleported,(objs)=>reader.Teleported.trigger(objs));
         }
         return reader;
     }

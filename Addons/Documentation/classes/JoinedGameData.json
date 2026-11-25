@@ -21,7 +21,7 @@
         },
         "JobId":{
             "memberType":"Property",
-            "valueType":"T?",
+            "valueType":"string",
             "isReadOnly":true,
             "Description":{
                 "en":"JobId of the most recently connected server; if no connections have been made, it is ''",
@@ -44,6 +44,14 @@
             "Description":{
                 "en":"Address(IP:Port) of the most recently connected server; if no connections have been made, it is ''",
                 "ru":"Адрес(IP:Порт) последнего подключённого сервер, если подключения не выполнялись =''"
+            }
+        },"isTeleported":{
+            "memberType":"Property",
+            "valueType":"boolean",
+            "isReadOnly":true,
+            "Description":{
+                "en":"Was the player teleported from another place",
+                "ru":"Был ли игрок телепортирован из другого плейса"
             }
         }
     }

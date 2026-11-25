@@ -3,6 +3,10 @@
 ---@class UDimCreator
 local UDimCreator={}
 
+---@param Scale number #Размер в отношении к максимальному этого UDim [0-1]
+---@return UDim UDim
+function UDimCreator.fromScale(Scale)end
+
 ---@param Offset number #Смещение в пикселях этого UDim
 ---@return UDim UDim
 function UDimCreator.fromOffset(Offset)end
@@ -12,7 +16,3 @@ function UDimCreator.fromOffset(Offset)end
 ---@param Offset number? #Смещение в пикселях этого UDim
 ---@return UDim UDim
 function UDimCreator.new(Scale,Offset)end
-
----@param Scale number #Размер в отношении к максимальному этого UDim [0-1]
----@return UDim UDim
-function UDimCreator.fromScale(Scale)end
