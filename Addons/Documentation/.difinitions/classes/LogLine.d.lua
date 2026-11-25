@@ -1,11 +1,11 @@
 ---@class LogLine
 ---@field TimeISO string#Время в формате ISO 8601
----@field logType string#Тип лога, например: 'Info'
----@field rawLine string#Необработанная строка этого лога
+---@field timeTag number#Временная метка указанная внутри этой строки лога
+---@field timestamp number#Время(timestamp) в секундах этой строки лога
 ---@field Sender string#Отправитель строки лога, например: 'FLog::Output'
+---@field rawLine string#Необработанная строка этого лога
+---@field logType string#Тип лога, например: 'Info'
+---@field contextId string#Третий параметр этого лога
 ---@field Data string#Данные строки лога
 ---@field logLevel number#Уровень лога
----@field timeTag number#Временная метка указанная внутри этой строки лога
----@field contextId string#Третий параметр этого лога
----@field timestamp number#Время(timestamp) в секундах этой строки лога
 local LogLine={}

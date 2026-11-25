@@ -36,7 +36,7 @@ class LuaProgramSync{
         if (!LogAnalizator.Flags.isRobloxPathInited) return DynValue.False;
         var deeplink = $"roblox://experiences/start?placeId={placeId}";
         if (JobID!=null)
-            deeplink += $"&serverId={JobID}";
+            deeplink += $"&gameInstanceId={JobID}";
         Process.Start(LogAnalizator.Data.robloxClientPath, deeplink);
         return DynValue.True;
     }

@@ -1,0 +1,17 @@
+﻿{
+    "Name":"RejoinTrayButton",
+    "DisplayName":{
+        "ru":"Перезайти через кнопку в трее",
+        "en":"Rejoin from tray button"
+    },
+    "Permissions":[
+        "create.tray_button",
+        "read_logs.join_event",
+        "roblox.joined_server"
+    ],
+    "UserPermissions":[
+        "roblox.join_game"
+    ],
+    "versionBuild":1,
+    "Settings":{}
+}

@@ -34,7 +34,7 @@
                     "name":"userPermissionName",
                     "type":"string",
                     "description":{
-                        "en":"USer permission name",
+                        "en":"User permission name",
                         "ru":"Название разрешения пользователя"
                     }
                 }
@@ -50,6 +50,31 @@
             ], "Description":{
                 "en":"Determines whether a permission has been granted by the user",
                 "ru":"Узнаёт выдано ли разрешение пользователем"
+            }
+        },"PermissionRequest":{
+            "memberType":"Method",
+            "isWithSelf":true,
+            "Args":[
+                {
+                    "name":"userPermissionName",
+                    "type":"string",
+                    "description":{
+                        "en":"User permission name",
+                        "ru":"Название разрешения пользователя"
+                    }
+                }
+            ], "Returns":[
+                {
+                    "name":"isGranted",
+                    "type":"boolean",
+                    "description":{
+                        "en":"Is user granted this permission?",
+                        "ru":"Выдал ли пользователь разрешение"
+                    }
+                }
+            ], "Description":{
+                "en":"It asks the user for permission and returns whether it has been granted.",
+                "ru":"Спрашивает разрешение у пользователя, и возвращает было ли оно выдано"
             }
         }
     }

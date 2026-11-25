@@ -1,35 +1,15 @@
----@diagnostic disable: inject-field
 ---@diagnostic disable: missing-return
+---@diagnostic disable: inject-field
 
 ---@class Window
 ---@field isBorderFixed boolean#Зафиксирована ли граница окна
----@field MaximazeBox boolean#Может ли пользователь увеличить окно на весь экран, игнорируется если установлен MaximumSize
----@field ClientSize PixelsSize#Размер внутренней области окна
----@field isVisible boolean#Видно ли окно
 ---@field Size PixelsSize#Размер окна в пикселях
----@field MinimumSize PixelsSize#Минимальный размер окна в пикселях
+---@field ClientSize PixelsSize#Размер внутренней области окна
 ---@field MaximumSize PixelsSize#Максимальный размер окна в пикселях
+---@field isVisible boolean#Видно ли окно
+---@field MinimumSize PixelsSize#Минимальный размер окна в пикселях
+---@field MaximazeBox boolean#Может ли пользователь увеличить окно на весь экран, игнорируется если установлен MaximumSize
 local Window={}
-
---[[Скрывает окно]]
-function Window:Hide()end
-
---[[Показывает окно]]
-function Window:Show()end
-
---[[Запускается когда изменился размер внутренней области окна]]
----@diagnostic disable-next-line: undefined-doc-name
----@type Event
-Window.ClientSizeChanged = {}
----Параллельно подключиться к событию
----@param callback fun()
-function Window.ClientSizeChanged:Connect(callback) end
----Параллельно подключиться к событию, но на 1 запуск
----@param callback fun()
-function Window.ClientSizeChanged:Once(callback) end
----Подождать пока запустится событие
-
-function Window.ClientSizeChanged:Wait() end
 
 --[[Запускается когда окно удалено]]
 ---@diagnostic disable-next-line: undefined-doc-name
@@ -45,19 +25,8 @@ function Window.Destroying:Once(callback) end
 
 function Window.Destroying:Wait() end
 
---[[Запускается когда видимость окна изменилась]]
----@diagnostic disable-next-line: undefined-doc-name
----@type Event
-Window.VisibleChanged = {}
----Параллельно подключиться к событию
----@param callback fun(isVisible: boolean)
-function Window.VisibleChanged:Connect(callback) end
----Параллельно подключиться к событию, но на 1 запуск
----@param callback fun(isVisible: boolean)
-function Window.VisibleChanged:Once(callback) end
----Подождать пока запустится событие
----@return boolean isVisible #Видно ли окно
-function Window.VisibleChanged:Wait() end
+--[[Скрывает окно]]
+function Window:Hide()end
 
 --[[Запускается когда изменился размер окна]]
 ---@diagnostic disable-next-line: undefined-doc-name
@@ -72,6 +41,23 @@ function Window.SizeChanged:Once(callback) end
 ---Подождать пока запустится событие
 ---@return PixelsSize Size
 function Window.SizeChanged:Wait() end
+
+--[[Запускается когда видимость окна изменилась]]
+---@diagnostic disable-next-line: undefined-doc-name
+---@type Event
+Window.VisibleChanged = {}
+---Параллельно подключиться к событию
+---@param callback fun(isVisible: boolean)
+function Window.VisibleChanged:Connect(callback) end
+---Параллельно подключиться к событию, но на 1 запуск
+---@param callback fun(isVisible: boolean)
+function Window.VisibleChanged:Once(callback) end
+---Подождать пока запустится событие
+---@return boolean isVisible #Видно ли окно
+function Window.VisibleChanged:Wait() end
+
+--[[Показывает окно]]
+function Window:Show()end
 
 --[[Запускается когда изменился минимальный размер окна]]
 ---@diagnostic disable-next-line: undefined-doc-name
@@ -103,3 +89,17 @@ function Window.MaximumSizeChanged:Wait() end
 
 --[[Удаляет окно]]
 function Window:Destroy()end
+
+--[[Запускается когда изменился размер внутренней области окна]]
+---@diagnostic disable-next-line: undefined-doc-name
+---@type Event
+Window.ClientSizeChanged = {}
+---Параллельно подключиться к событию
+---@param callback fun()
+function Window.ClientSizeChanged:Connect(callback) end
+---Параллельно подключиться к событию, но на 1 запуск
+---@param callback fun()
+function Window.ClientSizeChanged:Once(callback) end
+---Подождать пока запустится событие
+
+function Window.ClientSizeChanged:Wait() end
